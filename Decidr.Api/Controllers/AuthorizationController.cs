@@ -1,10 +1,6 @@
 ﻿using Decidr.Api.Dtos;
-using Decidr.Api.Models;
+using Decidr.Operations;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Decidr.Api.Controllers;
 
@@ -12,38 +8,34 @@ namespace Decidr.Api.Controllers;
 [Route("api/[controller]")]
 public class AuthorizationController : ControllerBase
 {
-    // Simple in-memory store for demo
-    private static List<User> _users = new();
+    private readonly IAuthorizationOperation _authOperation;
 
-    [HttpPost("register")]
-    public IActionResult Register([FromBody] RegisterRequestDto request)
+    public AuthorizationController(
+        IAuthorizationOperation authOperation)
     {
-        if (_users.Any(u => u.Username == request.Username))
-        {
-            return BadRequest("Username already exists");
-        }
-
-        var user = new User { Username = request.Username, Password = request.Password };
-        _users.Add(user);
-        return Ok(new { message = "User registered successfully" });
+        _authOperation = authOperation;
     }
 
-    [HttpPost("login")]
-    public IActionResult Login([FromBody] LoginRequestDto request)
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(
+        [FromBody] RegisterRequestDto request,
+        CancellationToken cancellationToken = default)
     {
-        var user = _users.SingleOrDefault(u => u.Username == request.Username && u.Password == request.Password);
-        if (user == null)
-            return Unauthorized();
+        var result = await _authOperation.RegisterUserAsync(request.Username, request.Password, cancellationToken);
+        return result
+            ? Ok(new { message = "User registered successfully" })
+            : BadRequest(new { message = "Unable to register successfully. Try again " });
+    }
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("abcdefghijklmnopqrstuvwxyzabcdefgh"));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var token = new JwtSecurityToken(
-            claims: new[] { new Claim(ClaimTypes.Name, request.Username) },
-            expires: DateTime.Now.AddHours(1),
-            signingCredentials: creds
-        );
-
-        return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+    // TODO: Set up JWT auth.
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(
+        [FromBody] LoginRequestDto request,
+        CancellationToken cancellationToken = default)
+    {
+        var success = await _authOperation.IsAuthorizedAsync(request.Username, request.Password, cancellationToken);
+        return success
+            ? Ok(new { message = "Login successful." })
+            : Unauthorized();
     }
 }

@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Decidr.Infrastructure;
+using Decidr.Operations;
+using FluentValidation;
 using System.Text;
 
 // TODO: Convert this to regular class syntax.
@@ -7,6 +8,8 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
 
 // Add Swagger services
 builder.Services.AddEndpointsApiExplorer(); // needed for minimal APIs
@@ -14,17 +17,6 @@ builder.Services.AddSwaggerGen();
 
 // Add JWT auth
 var key = Encoding.ASCII.GetBytes("super_secret_key_123!"); // use config/env in real apps
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = false,
-            ValidateAudience = false
-        };
-    });
 
 builder.Services.AddCors(options =>
 {
@@ -35,6 +27,9 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddOperations();
 
 var app = builder.Build();
 
