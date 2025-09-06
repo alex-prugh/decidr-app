@@ -1,0 +1,6 @@
+@Decidr.Api_HostAddress = http://localhost:5253
+
+GET {{Decidr.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

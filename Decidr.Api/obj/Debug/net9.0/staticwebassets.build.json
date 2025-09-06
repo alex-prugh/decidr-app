@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "iyYGohzehl1dREQJ0mn1PfQA/g0ht+XaPHmbb9UdIgk=",
+  "Source": "Decidr.Api",
+  "BasePath": "_content/Decidr.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
