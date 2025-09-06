@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Decidr.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public class AuthorizationController : ControllerBase
 {
     private readonly IAuthorizationOperation _authOperation;
