@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Decidr.Infrastructure.Extensions;
+namespace Decidr.Infrastructure.Users;
 
 public static class UserExtensions
 {

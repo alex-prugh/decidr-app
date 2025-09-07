@@ -1,6 +1,5 @@
 ﻿using Decidr.Infrastructure.EntityFramework;
 using Decidr.Infrastructure.EntityFramework.Models;
-using Decidr.Infrastructure.Extensions;
 using Decidr.Infrastructure.Helpers;
 using Decidr.Operations.BusinessObjects;
 using Decidr.Operations.Infrastructure;
