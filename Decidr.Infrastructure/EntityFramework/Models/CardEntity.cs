@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Decidr.Operations.BusinessObjects;
 
 namespace Decidr.Infrastructure.EntityFramework.Models;
 
@@ -29,5 +30,19 @@ public class CardEntityConfiguration : IEntityTypeConfiguration<CardEntity>
         entity.HasOne(c => c.Set)
             .WithMany(s => s.Cards)
             .HasForeignKey(c => c.SetId);
+    }
+}
+
+public static class CardExtensions
+{
+    public static Card ToBusinessObject(this CardEntity card)
+    {
+        return new Card
+        {
+            Id = card.Id,
+            Title = card.Title,
+            Description = card.Description,
+            ImageUrl = card.ImageUrl,
+        };
     }
 }

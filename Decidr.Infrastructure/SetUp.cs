@@ -1,6 +1,7 @@
 ﻿using Decidr.Infrastructure.EntityFramework;
 using Decidr.Infrastructure.Helpers;
 using Decidr.Infrastructure.Movies;
+using Decidr.Infrastructure.Sets;
 using Decidr.Infrastructure.Users;
 using Decidr.Operations.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ public static class SetUp
         services.AddSingleton<IPasswordEncryptionService, PasswordEncryptionService>();
         services.AddScoped<IUsersDataProvider, UsersDataProvider>();
         services.AddScoped<IMoviesDataProvider, MoviesDataProvider>();
+        services.AddScoped<ISetsDataProvider, SetsDataProvider>();
         services.AddHttpClient("TheMovieDb", client =>
         {
             client.BaseAddress = new Uri("https://api.themoviedb.org/3/");

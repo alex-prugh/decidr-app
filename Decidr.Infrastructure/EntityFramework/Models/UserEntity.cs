@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Decidr.Operations.BusinessObjects;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Decidr.Infrastructure.EntityFramework.Models;
@@ -22,5 +23,17 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>
         entity.Property(x => x.PasswordHash).HasColumnName("PasswordHash");
         entity.Property(x => x.Name).HasColumnName("Name");
         entity.Property(x => x.CreateDate).HasColumnName("CreateDate");
+    }
+}
+
+public static class UserExtensions
+{
+    public static User ToBusinessObject(this UserEntity userEntity)
+    {
+        return new User
+        {
+            Id = userEntity.Id,
+            Username = userEntity.Username,
+        };
     }
 }

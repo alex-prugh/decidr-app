@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Decidr.Operations.BusinessObjects;
 
 namespace Decidr.Infrastructure.EntityFramework.Models;
 
@@ -23,5 +24,20 @@ public class SetEntityConfiguration : IEntityTypeConfiguration<SetEntity>
         entity.Property(x => x.CreatorId).HasColumnName("CreatorId"); // TODO: Make this a FK on Users
         entity.Property(x => x.ImageUrl).HasColumnName("ImageUrl");
         entity.Property(x => x.CreateDate).HasColumnName("CreateDate");
+    }
+}
+
+public static class SetExtensions
+{
+    public static Set ToBusinessObject(this SetEntity set)
+    {
+        return new Set
+        {
+            Id = set.Id,
+            Name = set.Name,
+            CreatorName = set.CreatorId.ToString(), // TODO Need to fetch creator name.
+            ImageUrl = set.ImageUrl,
+            Cards = set.Cards.Select(c => c.ToBusinessObject()).ToList()
+        };
     }
 }

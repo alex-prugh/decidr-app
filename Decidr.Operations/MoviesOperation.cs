@@ -1,43 +1,59 @@
 ﻿using Decidr.Operations.BusinessObjects;
 using Decidr.Operations.Infrastructure;
+using Microsoft.Extensions.Logging;
 
 namespace Decidr.Operations;
 
 public interface IMoviesOperation
 {
-    public Task<Set> GetPopularMoviesSetAsync(CancellationToken cancellationToken = default);
+    public Task<Set?> GetPopularMoviesSetAsync(CancellationToken cancellationToken = default);
 }
 
 public class MoviesOperation : IMoviesOperation
 {
     private readonly IMoviesDataProvider _moviesDataProvider;
+    private readonly ISetsDataProvider _setsDataProvider;
     private readonly UserContext _userContext;
+    private readonly ILogger<MoviesOperation> _logger;
 
     public MoviesOperation(
-        IMoviesDataProvider moviesDataProvider, 
-        UserContext userContext)
+        IMoviesDataProvider moviesDataProvider,
+        ISetsDataProvider setsDataProvider,
+        UserContext userContext,
+        ILogger<MoviesOperation> logger)
     {
         _moviesDataProvider = moviesDataProvider;
+        _setsDataProvider = setsDataProvider;
         _userContext = userContext;
+        _logger = logger;
     }
 
-    public async Task<Set> GetPopularMoviesSetAsync(CancellationToken cancellationToken = default)
+    public async Task<Set?> GetPopularMoviesSetAsync(CancellationToken cancellationToken)
     {
         var movies = await _moviesDataProvider.GetLatestPopularAsync(cancellationToken);
-        var setToReturn = new Set()
-        {
-            Id = 1,
-            Name = "GULP",
-            Cards = movies.Select(m => new Card
-            {
-                Id = 1,
-                Title = m.Title,
-                Description = m.Description,
-                ImageUrl = m.ImageUrl,
-                SetId = 1,
-            }).ToList()
-        };
 
-        return setToReturn;
+        var newSet = await CreateSetFromMoviesAsync("Popular Movies", movies, cancellationToken);
+        return newSet;
+    }
+
+    private async Task<Set?> CreateSetFromMoviesAsync(string setName, List<Movie> movies, CancellationToken cancellationToken)
+    {
+        var loggedInUserId = _userContext.GetUserOrThrow().Id;
+        var cards = movies.Select(m => new Card
+        {
+            Title = m.Title,
+            Description = m.Description,
+            ImageUrl = m.ImageUrl,
+        });
+
+        var newSet = await _setsDataProvider.CreateAsync(setName, cards.ToList(), loggedInUserId, cancellationToken);
+        if (newSet == null)
+        {
+            return null;
+        }
+
+        _logger.LogInformation("Successfully created new set {Sid} for user {Uid}", newSet.Id, loggedInUserId);
+
+        return newSet;
     }
 }
