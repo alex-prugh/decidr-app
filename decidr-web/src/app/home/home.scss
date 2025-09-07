@@ -1,0 +1,20 @@
+.card-img {
+    width: auto; 
+    max-width: 300px;
+    height: 300px;
+    display: block;
+    margin: 0 auto; 
+}
+
+.new-badge {
+    position: absolute;
+    top: 10px;        
+    right: 10px;     
+    background-color: #dc3545;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: rem;
+    font-weight: bold;
+    z-index: 10;
+}

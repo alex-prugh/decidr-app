@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Decidr.Operations.BusinessObjects;
+using Decidr.Infrastructure.EntityFramework.Views;
 
 namespace Decidr.Infrastructure.EntityFramework.Models;
 
@@ -40,6 +41,20 @@ public static class SetExtensions
             CreatorName = set.CreatorId.ToString(), // TODO Need to fetch creator name.
             ImageUrl = set.ImageUrl,
             Cards = set.Cards.Select(c => c.ToBusinessObject()).ToList()
+        };
+    }
+
+    public static Set ToBusinessObject(this SetWithUnreadInfo setWithInfo)
+    {
+        var set = setWithInfo.Set;
+        return new Set
+        {
+            Id = set.Id,
+            Name = set.Name,
+            CreatorName = set.CreatorId.ToString(), // TODO Need to fetch creator name.
+            ImageUrl = set.ImageUrl,
+            Cards = set.Cards.Select(c => c.ToBusinessObject()).ToList(),
+            IsUnread = setWithInfo.IsUnread
         };
     }
 }

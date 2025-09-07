@@ -3,7 +3,6 @@ using Decidr.Api.Extensions;
 using Decidr.Operations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Server.IIS;
 
 namespace Decidr.Api.Controllers;
 

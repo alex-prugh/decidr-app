@@ -1,6 +1,6 @@
 ﻿using Decidr.Infrastructure.EntityFramework;
 using Decidr.Infrastructure.EntityFramework.Models;
-using Decidr.Operations;
+using Decidr.Infrastructure.EntityFramework.Views;
 using Decidr.Operations.BusinessObjects;
 using Decidr.Operations.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -76,12 +76,15 @@ public class SetsDataProvider : ISetsDataProvider
         return setEntities.Select(s => s.ToBusinessObject()).ToList();
     }
 
-    private IQueryable<SetEntity> QuerySetsForUser(long userId, long? setId = null)
+    private IQueryable<SetWithUnreadInfo> QuerySetsForUser(long userId, long? setId = null)
     {
         return _dbContext.SetMembers
                     .Where(sm => (setId == null || sm.SetId == setId) && sm.UserId == userId)
                     .Include(sm => sm.Set)
                     .ThenInclude(s => s.Cards)
-                    .Select(sm => sm.Set);
+                    .Select(sm => new SetWithUnreadInfo {
+                       Set = sm.Set,
+                       IsUnread = sm.IsUnread
+                    });
     }
 }

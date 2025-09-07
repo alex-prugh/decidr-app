@@ -1,4 +1,43 @@
 <div class="container mt-5">
-  <h2>Welcome to Decidr</h2>
-  <p>This is a placeholder. Later we can add dashboard or user content here.</p>
+  <h2>Welcome to Decidr!</h2>
+  <p>You've come to the right place to help with your date night decisions.</p>
+
+  <div>
+    <h2>Your Sets</h2>
+    Here is the list of sets that you have created or others have invited you to vote on.
+
+    @if (loading) {
+        <div>Loading sets...</div>
+    }
+
+    @if (error) {
+        <div class="text-danger">{{ error }}</div>
+    }
+
+    @for (set of sets; track set.id) {
+        <div class="col-md-4 mb-3">
+            <div class="card position-relative">
+                @if (set.isUnread) {
+                    <span class="new-badge">NEW</span>
+                }
+
+                @if (set.imageUrl) {
+                    <img [src]="set.imageUrl" class="card-img" alt="{{ set.name }}" />
+                } @else {
+                    <div class="card-img d-flex justify-content-center align-items-center bg-secondary text-white" style="height: 200px;">
+                        {{ set.name }}
+                    </div>
+                }
+            
+                <div class="card-body">
+                    <h5 class="card-title">{{ set.name }}</h5>
+                    <a [routerLink]="['/sets', set.id]" class="btn btn-primary">View Set</a>
+                </div>
+            </div>
+        </div>
+    } @empty { 
+        <div>No sets found</div>
+    }
+    
+    </div>
 </div>

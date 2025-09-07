@@ -9,6 +9,7 @@ public class SetDto
     public string? CreatorName { get; set; }
     public string? ImageUrl { get; set; }
     public IReadOnlyCollection<CardDto> Cards { get; set; } = [];
+    public bool IsUnread { get; set; }
 }
 
 public static class SetExtensions
@@ -21,7 +22,8 @@ public static class SetExtensions
             Name = set.Name,
             CreatorName = set.CreatorName,
             ImageUrl = set.ImageUrl,
-            Cards = set.Cards.Select(c => c.ToDto()).ToList()
+            Cards = set.Cards.Select(c => c.ToDto()).ToList(),
+            IsUnread = set.IsUnread
         };
     }
 }
