@@ -37,7 +37,11 @@ public class SetsDataProvider : ISetsDataProvider
                 Name = name,
                 Cards = cardEntities.ToList(),
                 CreatorId = creatorUserId,
-                ImageUrl = cardEntities.FirstOrDefault(c => c.ImageUrl != null)?.ImageUrl,
+                ImageUrl = cardEntities
+                    .Where(c => c.ImageUrl != null)
+                    .OrderBy(c => Guid.NewGuid())
+                    .Select(c => c.ImageUrl)
+                    .FirstOrDefault(),
                 Members = new List<SetMemberEntity>
                 {
                     new SetMemberEntity

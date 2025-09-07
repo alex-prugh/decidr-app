@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { Set } from '../shared/models/set';
 
 @Component({
@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
   loading = true;
   error = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
     this.loadSets();
@@ -34,6 +34,21 @@ export class HomeComponent implements OnInit {
           this.error = 'Failed to load sets';
           this.loading = false;
           console.error(err);
+        }
+      });
+  }
+
+  createPopularMoviesSet(): void {
+    // Make a POST request to the API
+    this.http.get<Set>('https://localhost:5001/api/movies/popular', {})
+      .subscribe({
+        next: (newSet) => {
+          // On success, navigate to the new set's detail page
+          this.router.navigate(['/sets', newSet.id]);
+        },
+        error: (err) => {
+          console.error('Error creating popular movies set:', err);
+          alert('Failed to get popular movies.');
         }
       });
   }

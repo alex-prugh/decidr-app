@@ -32,7 +32,7 @@ public class MoviesOperation : IMoviesOperation
     {
         var movies = await _moviesDataProvider.GetLatestPopularAsync(cancellationToken);
 
-        var newSet = await CreateSetFromMoviesAsync("Popular Movies", movies, cancellationToken);
+        var newSet = await CreateSetFromMoviesAsync($"Popular Movies: {DateTime.Today.ToString("yyyy-MM-dd")}", movies, cancellationToken);
         return newSet;
     }
 
