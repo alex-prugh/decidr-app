@@ -1,7 +1,9 @@
 ﻿using Decidr.Infrastructure.EntityFramework;
 using Decidr.Infrastructure.EntityFramework.Models;
+using Decidr.Operations;
 using Decidr.Operations.BusinessObjects;
 using Decidr.Operations.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Decidr.Infrastructure.Sets;
@@ -56,5 +58,30 @@ public class SetsDataProvider : ISetsDataProvider
         }
 
         return null;
+    }
+
+    public async Task<Set?> Get(long setId, long userId, CancellationToken cancellationToken = default)
+    {
+        var setEntity = await QuerySetsForUser(userId, setId)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return setEntity?.ToBusinessObject();
+    }
+
+    public async Task<List<Set>> GetAllForUser(long userId, CancellationToken cancellationToken = default)
+    {
+        var setEntities = await QuerySetsForUser(userId)
+            .ToListAsync(cancellationToken);
+
+        return setEntities.Select(s => s.ToBusinessObject()).ToList();
+    }
+
+    private IQueryable<SetEntity> QuerySetsForUser(long userId, long? setId = null)
+    {
+        return _dbContext.SetMembers
+                    .Where(sm => (setId == null || sm.SetId == setId) && sm.UserId == userId)
+                    .Include(sm => sm.Set)
+                    .ThenInclude(s => s.Cards)
+                    .Select(sm => sm.Set);
     }
 }

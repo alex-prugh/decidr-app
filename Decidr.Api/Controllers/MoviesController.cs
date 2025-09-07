@@ -21,9 +21,14 @@ public class MoviesController : ControllerBase
 
     [HttpGet("popular")]
     [Authorize]
-    public async Task<SetDto?> Get(CancellationToken cancellationToken = default)
+    public async Task<ActionResult<SetDto?>> Get(CancellationToken cancellationToken = default)
     {
         var set = await _moviesOperation.GetPopularMoviesSetAsync(cancellationToken);
+        if (set == null)
+        {
+            return StatusCode(500, "Internal server error");
+        }
+
         return set?.ToDto();
     }
 }
