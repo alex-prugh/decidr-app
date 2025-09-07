@@ -35,7 +35,14 @@ public class SetsDataProvider : ISetsDataProvider
                 Name = name,
                 Cards = cardEntities.ToList(),
                 CreatorId = creatorUserId,
-                ImageUrl = cardEntities.FirstOrDefault(c => c.ImageUrl != null)?.ImageUrl
+                ImageUrl = cardEntities.FirstOrDefault(c => c.ImageUrl != null)?.ImageUrl,
+                Members = new List<SetMemberEntity>
+                {
+                    new SetMemberEntity
+                    {
+                        UserId = creatorUserId,
+                    }
+                }
             };
 
             _dbContext.Add(newSet);

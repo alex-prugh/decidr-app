@@ -11,6 +11,8 @@ public class UserEntity
     public string PasswordHash { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public DateTimeOffset CreateDate { get; set; } = DateTimeOffset.UtcNow;
+
+    public virtual ICollection<SetMemberEntity> SetMembers { get; set; } = [];
 }
 
 public class UserEntityConfiguration : IEntityTypeConfiguration<UserEntity>

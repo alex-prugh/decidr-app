@@ -11,7 +11,9 @@ public class SetEntity
     public long CreatorId { get; set; }
     public string? ImageUrl { get; set; }
     public DateTimeOffset CreateDate { get; set; } = DateTimeOffset.UtcNow;
+
     public virtual ICollection<CardEntity> Cards { get; set; } = [];
+    public virtual ICollection<SetMemberEntity> Members { get; set; } = [];
 }
 
 public class SetEntityConfiguration : IEntityTypeConfiguration<SetEntity>
