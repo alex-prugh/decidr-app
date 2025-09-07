@@ -21,7 +21,7 @@ public class AuthorizationOperation : IAuthorizationOperation
 
     public async Task<User?> GetUserAsync(string username, string password, CancellationToken cancellationToken)
     {
-        var user = await _usersDataProvider.GetUserAsync(username, password, cancellationToken);
+        var user = await _usersDataProvider.GetUserByUsernamePasswordAsync(username, password, cancellationToken);
         if (user == null)
         {
             return null;
@@ -32,7 +32,7 @@ public class AuthorizationOperation : IAuthorizationOperation
 
     public async Task<bool> RegisterUserAsync(string username, string password, CancellationToken cancellationToken)
     {
-        var user = await _usersDataProvider.GetUserAsync(username, password, cancellationToken);
+        var user = await _usersDataProvider.GetUserByUsernamePasswordAsync(username, password, cancellationToken);
 
         if (user == null)
         {

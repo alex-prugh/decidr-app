@@ -11,17 +11,19 @@ public interface IMoviesOperation
 public class MoviesOperation : IMoviesOperation
 {
     private readonly IMoviesDataProvider _moviesDataProvider;
+    private readonly UserContext _userContext;
 
     public MoviesOperation(
-        IMoviesDataProvider moviesDataProvider)
+        IMoviesDataProvider moviesDataProvider, 
+        UserContext userContext)
     {
         _moviesDataProvider = moviesDataProvider;
+        _userContext = userContext;
     }
 
     public async Task<Set> GetPopularMoviesSetAsync(CancellationToken cancellationToken = default)
     {
         var movies = await _moviesDataProvider.GetLatestPopularAsync(cancellationToken);
-
         var setToReturn = new Set()
         {
             Id = 1,

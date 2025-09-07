@@ -1,4 +1,5 @@
 ﻿using Decidr.Api.Dtos;
+using Decidr.Api.Extensions;
 using Decidr.Operations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ namespace Decidr.Api.Controllers;
 
 [ApiController]
 [Route("api/movies")]
+[RequiresUserContext]
 public class MoviesController : ControllerBase
 {
     private readonly IMoviesOperation _moviesOperation;

@@ -4,6 +4,7 @@ namespace Decidr.Operations.Infrastructure;
 
 public interface IUsersDataProvider
 {
-    public Task<User?> GetUserAsync(string username, string password, CancellationToken cancellationToken = default);
+    public Task<User?> GetUserByIdAsync(long userId, CancellationToken cancellationToken = default);
+    public Task<User?> GetUserByUsernamePasswordAsync(string username, string password, CancellationToken cancellationToken = default);
     public Task<User?> CreateAsync(string username, string password, CancellationToken cancellationToken = default);
 }
