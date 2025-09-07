@@ -1,38 +1,33 @@
-﻿using Decidr.Operations.Infrastructure;
-using System.Threading.Tasks;
+﻿using Decidr.Operations.BusinessObjects;
+using Decidr.Operations.Infrastructure;
 
 namespace Decidr.Operations;
 
 public interface IAuthorizationOperation
 {
-    public Task<bool> IsAuthorizedAsync(string username, string password, CancellationToken cancellationToken = default);
+    public Task<User?> GetUserAsync(string username, string password, CancellationToken cancellationToken = default);
     public Task<bool> RegisterUserAsync(string username, string password, CancellationToken cancellationToken = default);
 }
 
 public class AuthorizationOperation : IAuthorizationOperation
 {
     private readonly IUsersDataProvider _usersDataProvider;
-    private readonly UserContext _userContext;
 
     public AuthorizationOperation(
-        IUsersDataProvider usersDataProvider,
-        UserContext userContext)
+        IUsersDataProvider usersDataProvider)
     {
         _usersDataProvider = usersDataProvider;
-        _userContext = userContext;
     }
 
-    // TODO: Add some sort of JWT checking.
-    public async Task<bool> IsAuthorizedAsync(string username, string password, CancellationToken cancellationToken)
+    public async Task<User?> GetUserAsync(string username, string password, CancellationToken cancellationToken)
     {
         var user = await _usersDataProvider.GetUserAsync(username, password, cancellationToken);
         if (user == null)
         {
-            return false;
+            return null;
         }
 
-        _userContext.Current = user;
-        return true;
+        return user;
     }
 
     public async Task<bool> RegisterUserAsync(string username, string password, CancellationToken cancellationToken)

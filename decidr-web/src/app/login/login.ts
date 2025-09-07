@@ -22,7 +22,7 @@ export class LoginComponent {
       password: this.password
     }).subscribe({
       next: (res) => {
-        alert('Login successful!');
+        localStorage.setItem('jwt', res.token);
         this.router.navigate(['/home']);
       },
       error: () => alert('Invalid credentials')
