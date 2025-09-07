@@ -3,10 +3,14 @@ using FluentValidation;
 
 namespace Decidr.Api.Validators;
 
+// TODO: I don't think this is working.
 public class RegisterRequestValidator : AbstractValidator<RegisterRequestDto>
 {
     public RegisterRequestValidator()
     {
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("Name is required");
+
         RuleFor(x => x.Username)
             .NotEmpty().WithMessage("Username is required")
             .MinimumLength(3).WithMessage("Username must be at least 3 characters");

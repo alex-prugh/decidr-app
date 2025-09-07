@@ -4,6 +4,10 @@
       <h3>Register</h3>
       <form (ngSubmit)="register()">
         <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input [(ngModel)]="name" name="name" class="form-control" required />
+        </div>
+        <div class="mb-3">
           <label class="form-label">Username</label>
           <input [(ngModel)]="username" name="username" class="form-control" required />
         </div>

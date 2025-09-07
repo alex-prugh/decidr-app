@@ -1,6 +1,8 @@
 using Decidr.Infrastructure;
 using Decidr.Operations;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 // TODO: Convert this to regular class syntax.
@@ -15,8 +17,24 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddEndpointsApiExplorer(); // needed for minimal APIs
 builder.Services.AddSwaggerGen();
 
-// Add JWT auth
-var key = Encoding.ASCII.GetBytes("super_secret_key_123!"); // use config/env in real apps
+// TODO: Put this in some of secrets manager.
+var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new ArgumentNullException("JWT Token");
+
+// Simple JWT for now.
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddCors(options =>
 {
