@@ -5,9 +5,24 @@ namespace Decidr.Operations;
 
 public interface ISetsOperation
 {
+    /// <summary>
+    /// Gets all sets for the logged-in user.
+    /// </summary>
     public Task<List<Set>> GetAllSetsAsync(CancellationToken cancellationToken = default);
+    
+    /// <summary>
+    /// Gets a given set for the user.
+    /// </summary>
     public Task<Set?> GetSetAsync(long setId, CancellationToken cancellationToken = default);
+    
+    /// <summary>
+    /// Gets the voting results for aset.
+    /// </summary>
     public Task<SetResult?> GetSetResultAsync(long setId, CancellationToken token = default);
+    
+    /// <summary>
+    /// Adds a member to view and vote on the set.
+    /// </summary>
     public Task<bool> AddMemberAsync(long setId, string email, CancellationToken cancellationToken);
 }
 
@@ -28,18 +43,21 @@ public class SetsOperation : ISetsOperation
         _userContext = userContext;
     }
 
+    /// <inheritdoc />
     public async Task<List<Set>> GetAllSetsAsync(CancellationToken cancellationToken)
     {
         var sets = await _setsDataProvider.GetAllForUser(_userContext.GetUserOrThrow().Id, false, cancellationToken);
         return sets;
     }
 
+    /// <inheritdoc />
     public async Task<Set?> GetSetAsync(long setId, CancellationToken cancellationToken)
     {
         var set = await _setsDataProvider.Get(setId, _userContext.GetUserOrThrow().Id, true, cancellationToken);
         return set;
     }
 
+    /// <inheritdoc />
     public async Task<SetResult?> GetSetResultAsync(long setId, CancellationToken cancellationToken)
     {
         var cardSummariesForSet = await _setsDataProvider.GetCardActivities(setId, _userContext.GetUserOrThrow().Id, cancellationToken);
@@ -81,6 +99,7 @@ public class SetsOperation : ISetsOperation
         };
     }
 
+    /// <inheritdoc />
     public async Task<bool> AddMemberAsync(long setId, string email, CancellationToken cancellationToken)
     {
         var user = await _usersDataProvider.GetByEmailAsync(email, cancellationToken);

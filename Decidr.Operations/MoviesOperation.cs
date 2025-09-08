@@ -31,6 +31,7 @@ public class MoviesOperation : IMoviesOperation
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public async Task<Set?> CreatePopularMoviesSetAsync(CancellationToken cancellationToken)
     {
         var movies = await _moviesDataProvider.GetLatestPopularAsync(cancellationToken);
