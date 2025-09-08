@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  createPopularMoviesSet(): void {
+  createPopularMoviesSet() : void {
     // Make a POST request to the API
     this.http.get<Set>('https://localhost:5001/api/movies/popular', {})
       .subscribe({
@@ -60,19 +60,19 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  openShareModal(setId: number): void {
+  openShareModal(setId: number) : void {
     this.selectedSetId = setId;
     this.showShareModal = true;
     this.shareSuccessMessage = '';
     this.shareErrorMessage = '';
   }
 
-  closeShareModal(): void {
+  closeShareModal() : void {
     this.showShareModal = false;
     this.emailToShareWith = '';
   }
 
-  shareSet(): void {
+  shareSet() : void {
     if (!this.selectedSetId || !this.emailToShareWith) {
       return;
     }
@@ -91,5 +91,9 @@ export class HomeComponent implements OnInit {
           console.error(err);
         }
       });
+  }
+
+  deleteSet(setId: number) : void {
+    
   }
 }

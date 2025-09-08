@@ -1,0 +1,40 @@
+$navbar-bg: #2c3e50; 
+$navbar-text: #ecf0f1; 
+$navbar-hover: #34495e;
+$navbar-brand-font: 'Arial', sans-serif;
+
+@use "sass:color";
+
+p {
+    font-size: 16px;
+}
+
+.navbar {
+  background-color: $navbar-bg !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem 1.5rem;
+  .navbar-brand {
+    color: $navbar-text !important;
+    font-weight: bold;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    font-family: $navbar-brand-font;
+  }
+  .nav-link {
+    color: $navbar-text !important;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    transition: color 0.3s ease-in-out;
+    &:hover {
+      color: color.adjust($navbar-text, $lightness: 15%)
+    }
+    &.active {
+      font-weight: bold;
+    }
+  }
+  .navbar-nav {
+    .nav-item {
+      margin-left: 1rem;
+    }
+  }
+}

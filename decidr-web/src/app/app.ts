@@ -12,7 +12,7 @@ import { RouterModule, Router } from '@angular/router';
   styleUrls: ['./app.scss']
 })
 export class App {
-  protected readonly title = 'Decidr';
+  protected readonly title = 'Decidr 🤔';
 
   constructor(private router: Router) { }
 
