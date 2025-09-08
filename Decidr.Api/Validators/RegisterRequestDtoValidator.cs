@@ -3,7 +3,6 @@ using FluentValidation;
 
 namespace Decidr.Api.Validators;
 
-// TODO: I don't think this is working.
 public class RegisterRequestValidator : AbstractValidator<RegisterRequestDto>
 {
     public RegisterRequestValidator()

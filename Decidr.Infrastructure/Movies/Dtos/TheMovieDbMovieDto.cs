@@ -1,8 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Decidr.Infrastructure.Movies.Models;
+namespace Decidr.Infrastructure.Movies.Dtos;
 
-public class TheMovieDbMovie
+/// <summary>
+/// .NET model that matches TheMovieDb's movie data schema.
+/// </summary>
+public class TheMovieDbMovieDto
 {
     [JsonPropertyName("adult")]
     public bool Adult { get; set; }

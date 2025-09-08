@@ -21,7 +21,7 @@ public class SetsDataProvider : ISetsDataProvider
         _logger = logger;
     }
 
-    public async Task<bool> AddMemberAsync(long setId, User user, CancellationToken cancellationToken)
+    public async Task<bool> AddMemberAsync(long setId, User user, long addedByUserId, CancellationToken cancellationToken)
     {
         var set = await _dbContext.Sets.Where(s => s.Id == setId).FirstOrDefaultAsync(cancellationToken);
         if (set == null)
@@ -33,7 +33,8 @@ public class SetsDataProvider : ISetsDataProvider
         {
             SetId = set.Id,
             UserId = user.Id,
-            HasVoted = false
+            HasVoted = false,
+            AddedById = addedByUserId,
         };
 
         _dbContext.Add(newMember);
@@ -128,6 +129,7 @@ public class SetsDataProvider : ISetsDataProvider
         var query = _dbContext.SetMembers
             .Where(sm => (setId == null || sm.SetId == setId) && sm.UserId == userId);
 
+        // Avoid loading cards if they're not needed.
         if (includeCards)
         {
             query = query

@@ -5,7 +5,8 @@ namespace Decidr.Api.Dtos;
 [DataContract]
 public class LoginRequestDto
 {
-    [DataMember(Name = "username")]
+    [DataMember]
     public required string Username { get; set; }
+    [DataMember]
     public required string Password { get; set; }
 }

@@ -1,14 +1,22 @@
 ﻿using Decidr.Operations.BusinessObjects;
+using System.Runtime.Serialization;
 
 namespace Decidr.Api.Dtos;
 
+[DataContract]
 public class CardDto
 {
+    [DataMember]
     public long Id { get; set; }
+    [DataMember]
     public string? Title { get; set; }
+    [DataMember]
     public string? Description { get; set; }
+    [DataMember]
     public string? ImageUrl { get; set; }
+    [DataMember]
     public bool IsLiked { get; set; }
+    [DataMember]
     public bool IsDisliked { get; set; }
 }
 

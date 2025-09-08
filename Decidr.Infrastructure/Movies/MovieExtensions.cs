@@ -1,11 +1,11 @@
-﻿using Decidr.Infrastructure.Movies.Models;
+﻿using Decidr.Infrastructure.Movies.Dtos;
 using Decidr.Operations.BusinessObjects;
 
 namespace Decidr.Infrastructure.Movies;
 
 public static class MovieExtensions
 {
-    public static Movie ToBusinessObject(this TheMovieDbMovie movie)
+    public static Movie ToBusinessObject(this TheMovieDbMovieDto movie)
     {
         return new Movie
         {

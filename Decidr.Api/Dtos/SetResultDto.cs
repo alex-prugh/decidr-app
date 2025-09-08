@@ -1,12 +1,16 @@
 ﻿using Decidr.Operations.BusinessObjects;
+using System.Runtime.Serialization;
 
 namespace Decidr.Api.Dtos;
 
+[DataContract]
 public class SetResultDto
 {
+    [DataMember]
     public long Id { get; set; }
+    [DataMember]
     public string? Name { get; set; }
-
+    [DataMember]
     public List<CardSummaryDto> CardSummaries { get; set; } = [];
 }
 

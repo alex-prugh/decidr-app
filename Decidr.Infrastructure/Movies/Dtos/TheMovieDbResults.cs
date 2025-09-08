@@ -1,10 +1,10 @@
 ﻿using Decidr.Operations.BusinessObjects;
 using System.Text.Json.Serialization;
 
-namespace Decidr.Infrastructure.Movies.Models;
+namespace Decidr.Infrastructure.Movies.Dtos;
 
 public class TheMovieDbResults
 {
     [JsonPropertyName("results")]
-    public List<TheMovieDbMovie> Movies { get; set; } = [];
+    public List<TheMovieDbMovieDto> Movies { get; set; } = [];
 }

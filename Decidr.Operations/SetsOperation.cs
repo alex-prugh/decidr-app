@@ -89,7 +89,7 @@ public class SetsOperation : ISetsOperation
             return false;
         }
 
-        var success = await _setsDataProvider.AddMemberAsync(setId, user, cancellationToken);
+        var success = await _setsDataProvider.AddMemberAsync(setId, user, _userContext.GetUserOrThrow().Id, cancellationToken);
         return success;
     }
 }

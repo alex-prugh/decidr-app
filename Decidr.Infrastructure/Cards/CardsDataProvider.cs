@@ -19,6 +19,7 @@ public class CardsDataProvider : ICardsDataProvider
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public async Task<bool> DislikeAsync(long userId, long cardId, CancellationToken cancellationToken = default)
     {
         try
@@ -65,6 +66,7 @@ public class CardsDataProvider : ICardsDataProvider
         return false;
     }
 
+    /// <inheritdoc />
     public async Task<bool> LikeAsync(long userId, long cardId, CancellationToken cancellationToken = default)
     {
         try
@@ -111,12 +113,20 @@ public class CardsDataProvider : ICardsDataProvider
         return false;
     }
 
+    /// <summary>
+    /// Verifies that the user has access to the given card by checking whether that user
+    /// is a member of the card's set.
+    /// </summary>
     private async Task<CardEntity?> GetCardAsync(long userId, long cardId, CancellationToken cancellationToken)
     {
         return await _dbContext.Cards
             .FirstOrDefaultAsync(c => c.Id == cardId && c.Set.Members.Any(sm => sm.UserId == userId), cancellationToken);
     }
 
+    /// <summary>
+    /// Once a user votes on a card in a set, update their 'HasVoted' flag so the client knows
+    /// they have performed an action on the set.
+    /// </summary>
     private async Task RecordUserHasVoted(long userId, CardEntity card, CancellationToken cancellationToken)
     {
         var setMember = await _dbContext.SetMembers.FirstOrDefaultAsync(sm => sm.SetId == card.SetId && sm.UserId == userId, cancellationToken);
