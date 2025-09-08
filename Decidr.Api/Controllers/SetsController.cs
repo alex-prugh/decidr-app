@@ -44,4 +44,12 @@ public class SetsController : ControllerBase
 
         return Ok(set.ToDto());
     }
+
+    [HttpGet("{id:long}/results")]
+    [Authorize]
+    public async Task<ActionResult<SetResultDto?>> GetResults(long id, CancellationToken cancellationToken = default)
+    {
+        var setResult = await _setsOperation.GetSetResultAsync(id, cancellationToken);
+        return setResult?.ToDto();
+    }
 }

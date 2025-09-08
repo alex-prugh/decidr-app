@@ -80,6 +80,29 @@ public class SetsDataProvider : ISetsDataProvider
         return setEntities.Select(s => s.ToBusinessObject(userId)).ToList();
     }
 
+    public async Task<List<CardSummary>> GetCardActivities(long setId, long userId, CancellationToken cancellationToken = default)
+    {
+        var hasAccessToSet = await _dbContext.SetMembers.AnyAsync(sm => sm.SetId == setId && sm.UserId == userId, cancellationToken);
+        if (!hasAccessToSet)
+        {
+            return [];
+        }
+
+        var cardSummaries = await _dbContext.Cards
+        .Where(c => c.SetId == setId)
+        .Select(c => new CardSummary
+        {
+            Id = c.Id,
+            Title = c.Title,
+            ImageUrl = c.ImageUrl,
+            Likes = c.Activities.Count(a => a.IsLiked),
+            Dislikes = c.Activities.Count(a => a.IsDisliked)
+        })
+        .ToListAsync(cancellationToken);
+
+        return cardSummaries;
+    }
+
     private IQueryable<SetWithUnreadInfo> QuerySetsForUser(long userId, bool includeCards = false, long? setId = null)
     {
         var query = _dbContext.SetMembers
