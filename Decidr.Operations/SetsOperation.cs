@@ -43,17 +43,35 @@ public class SetsOperation : ISetsOperation
             return null;
 
         var maxLikes = cardSummariesForSet.Max(c => c.Likes);
-        var topCards = cardSummariesForSet.Where(c => c.Likes == maxLikes).ToList();
-        var topCard = topCards[_random.Next(topCards.Count)];
+        var topCardId = (long)-1;
+
+        // No votes yet
+        if (maxLikes == 0)
+        {
+            topCardId = -1;
+        }
+        else
+        {
+            var topCards = cardSummariesForSet.Where(c => c.Likes == maxLikes).ToList();
+            var topCard = topCards[_random.Next(topCards.Count)];
+            topCardId = topCard.Id;
+        }
 
         var cardSummaries = cardSummariesForSet
-        .OrderByDescending(c => c.Id == topCard.Id)
-        .ThenByDescending(c => c.Likes);
+            .OrderByDescending(c => c.Id == topCardId)
+            .ThenByDescending(c => c.Likes)
+            .ThenBy(c => c.Dislikes);
+
+        var cardSummary = cardSummaries.FirstOrDefault(cs => cs.Id ==  topCardId);
+        if (cardSummary != null)
+        {
+            cardSummary.IsSuggested = true;
+        }
 
         return new SetResult
         {
             Id = setId,
-            CardSummaries = cardSummariesForSet
+            CardSummaries = cardSummaries.ToList()
         };
     }
 }

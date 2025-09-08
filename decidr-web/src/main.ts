@@ -4,7 +4,6 @@ import { provideRouter } from '@angular/router';
 import { App } from './app/app';
 import { routes } from './app/app.routes';
 
-// TODO: Move to different file?
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = localStorage.getItem('jwt');
 

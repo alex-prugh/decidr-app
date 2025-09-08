@@ -31,7 +31,10 @@
             
                 <div class="card-body">
                     <h5 class="card-title">{{ set.name }}</h5>
-                    <a [routerLink]="['/sets', set.id]" class="btn btn-primary">View Set</a>
+                    <div class="btn-group w-100" role="group">
+                        <a [routerLink]="['/sets', set.id]" class="btn btn-primary">View Set</a>
+                        <a [routerLink]="['/sets', set.id, 'result']" class="btn btn-success">View Results</a>
+                    </div>
                 </div>
             </div>
         </div>
