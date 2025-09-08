@@ -11,7 +11,8 @@
         <div class="row">
             @for (card of set.cards; track card.id) {
             <div class="col-md-6 mb-4">
-                <div class="card">
+                <div class="card"
+                    [ngClass]="{ 'liked-card-border': card.isLiked, 'disliked-card-border': card.isDisliked }">
                 @if (card.imageUrl) {
                     <img [src]="card.imageUrl" class="card-img-top" alt="{{ card.title }}" />
                 }
@@ -19,8 +20,18 @@
                     <h5 class="card-title">{{ card.title }}</h5>
                     <p class="card-text">{{ card.description }}</p>
                     <div class="d-flex justify-content-between mt-3">
-                    <button class="btn btn-success" (click)="likeCard(card.id)">Like</button>
-                    <button class="btn btn-danger" (click)="dislikeCard(card.id)">Dislike</button>
+                    <button
+                        class="btn"
+                        [ngClass]="{ 'btn-success': card.isLiked, 'btn-outline-success': !card.isLiked }"
+                        (click)="likeCard(card)">
+                        Like
+                    </button>
+                    <button
+                        class="btn"
+                        [ngClass]="{ 'btn-danger': card.isDisliked, 'btn-outline-danger': !card.isDisliked }"
+                        (click)="dislikeCard(card)">
+                        Dislike
+                    </button>
                     </div>
                 </div>
                 </div>

@@ -11,25 +11,27 @@ namespace Decidr.Api.Controllers;
 [RequiresUserContext]
 public class CardsController : ControllerBase
 {
-    private readonly ISetsOperation _setsOperation;
+    private readonly ICardsOperation _cardsOperation;
 
     public CardsController(
-        ISetsOperation setsOperation)
+        ICardsOperation cardsOperation)
     {
-        _setsOperation = setsOperation;
+        _cardsOperation = cardsOperation;
     }
 
     [HttpPost("{id:int}/like")]
     [Authorize]
     public async Task<ActionResult<bool>> Like(long id, CancellationToken cancellationToken = default)
     {
-        return true;
+        var success = await _cardsOperation.LikeAsync(id, cancellationToken);
+        return Ok(success);
     }
 
     [HttpPost("{id:long}/dislike")]
     [Authorize]
     public async Task<ActionResult<bool>> Dislike(long id, CancellationToken cancellationToken = default)
     {
-        return true;
+        var success = await _cardsOperation.DislikeAsync(id, cancellationToken);
+        return Ok(success);
     }
 }

@@ -1,13 +1,20 @@
 // src/app/set-detail/set-detail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Set } from '../shared/models/set';
+import { Card } from '../shared/models/card';
 
 @Component({
   selector: 'app-set-detail',
   templateUrl: './set-detail.html',
   styleUrls: ['./set-detail.scss'],
+  standalone: true,
+  imports: [
+    RouterModule,
+    CommonModule,
+  ]
 })
 export class SetDetailComponent implements OnInit {
   set: Set | undefined;
@@ -41,14 +48,34 @@ export class SetDetailComponent implements OnInit {
     );
   }
 
-  likeCard(cardId: number): void {
-    console.log(`Liked card with id: ${cardId}`);
-    // Implement API call for liking a card here
+  likeCard(card: Card): void {
+    const url = `https://localhost:5001/api/cards/${card.id}/like`;
+    this.http.post<boolean>(url, {}).subscribe({
+      next: (success) => {
+        if (success) {
+          card.isLiked = true;
+          card.isDisliked = false;
+        }
+      },
+      error: (err) => {
+        console.error('Error liking card:', err);
+      }
+    });
   }
 
-  dislikeCard(cardId: number): void {
-    console.log(`Disliked card with id: ${cardId}`);
-    // Implement API call for disliking a card here
+  dislikeCard(card: Card): void {
+    const url = `https://localhost:5001/api/cards/${card.id}/dislike`;
+    this.http.post<boolean>(url, {}).subscribe({
+      next: (success) => {
+        if (success) {
+          card.isLiked = false;
+          card.isDisliked = true;
+        }
+      },
+      error: (err) => {
+        console.error('Error disliking card:', err);
+      }
+    });
   }
 
   goHome(): void {
