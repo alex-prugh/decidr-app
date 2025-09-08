@@ -66,10 +66,10 @@ public class SetsDataProvider : ISetsDataProvider
 
     public async Task<Set?> Get(long setId, long userId, CancellationToken cancellationToken = default)
     {
-        var setEntity = await QuerySetsForUser(userId, setId)
+        var setEntity = await QuerySetsForUser(userId, true, setId)
             .FirstOrDefaultAsync(cancellationToken);
 
-        return setEntity?.ToBusinessObject();
+        return setEntity?.ToBusinessObject(userId);
     }
 
     public async Task<List<Set>> GetAllForUser(long userId, CancellationToken cancellationToken = default)
@@ -77,18 +77,31 @@ public class SetsDataProvider : ISetsDataProvider
         var setEntities = await QuerySetsForUser(userId)
             .ToListAsync(cancellationToken);
 
-        return setEntities.Select(s => s.ToBusinessObject()).ToList();
+        return setEntities.Select(s => s.ToBusinessObject(userId)).ToList();
     }
 
-    private IQueryable<SetWithUnreadInfo> QuerySetsForUser(long userId, long? setId = null)
+    private IQueryable<SetWithUnreadInfo> QuerySetsForUser(long userId, bool includeCards = false, long? setId = null)
     {
-        return _dbContext.SetMembers
-                    .Where(sm => (setId == null || sm.SetId == setId) && sm.UserId == userId)
-                    .Include(sm => sm.Set)
+        var query = _dbContext.SetMembers
+            .Where(sm => (setId == null || sm.SetId == setId) && sm.UserId == userId);
+
+        if (includeCards)
+        {
+            query = query
+                .Include(sm => sm.Set)
                     .ThenInclude(s => s.Cards)
-                    .Select(sm => new SetWithUnreadInfo {
-                       Set = sm.Set,
-                       IsUnread = sm.IsUnread
-                    });
+                        .ThenInclude(c => c.Activities);
+        }
+        else
+        {
+            query = query
+                .Include(sm => sm.Set);
+        }
+
+        return query.Select(sm => new SetWithUnreadInfo
+        {
+            Set = sm.Set,
+            IsUnread = sm.IsUnread
+        });
     }
 }

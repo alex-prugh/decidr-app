@@ -37,14 +37,18 @@ public class CardEntityConfiguration : IEntityTypeConfiguration<CardEntity>
 
 public static class CardExtensions
 {
-    public static Card ToBusinessObject(this CardEntity card)
+    public static Card ToBusinessObject(this CardEntity card, long? userId = null)
     {
+        var activity = userId == null ? null : card.Activities?.FirstOrDefault(a => a.UserId == userId);
+
         return new Card
         {
             Id = card.Id,
             Title = card.Title,
             Description = card.Description,
             ImageUrl = card.ImageUrl,
+            IsLiked = activity?.IsLiked ?? false,
+            IsDisliked = activity?.IsDisliked ?? false,
         };
     }
 }

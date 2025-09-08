@@ -44,7 +44,7 @@ public static class SetExtensions
         };
     }
 
-    public static Set ToBusinessObject(this SetWithUnreadInfo setWithInfo)
+    public static Set ToBusinessObject(this SetWithUnreadInfo setWithInfo, long userId)
     {
         var set = setWithInfo.Set;
         return new Set
@@ -53,7 +53,7 @@ public static class SetExtensions
             Name = set.Name,
             CreatorName = set.CreatorId.ToString(), // TODO Need to fetch creator name.
             ImageUrl = set.ImageUrl,
-            Cards = set.Cards.Select(c => c.ToBusinessObject()).ToList(),
+            Cards = set.Cards.Select(c => c.ToBusinessObject(userId)).ToList(),
             IsUnread = setWithInfo.IsUnread
         };
     }

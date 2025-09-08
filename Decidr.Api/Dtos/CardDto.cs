@@ -8,6 +8,8 @@ public class CardDto
     public string? Title { get; set; }
     public string? Description { get; set; }
     public string? ImageUrl { get; set; }
+    public bool IsLiked { get; set; }
+    public bool IsDisliked { get; set; }
 }
 
 public static class CardExtensions
@@ -20,6 +22,8 @@ public static class CardExtensions
             Title = card.Title,
             Description = card.Description,
             ImageUrl = card.ImageUrl,
+            IsLiked = card.IsLiked,
+            IsDisliked = card.IsDisliked
         };
     }
 }
