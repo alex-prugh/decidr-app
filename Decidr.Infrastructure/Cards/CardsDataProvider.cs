@@ -24,7 +24,7 @@ public class CardsDataProvider : ICardsDataProvider
         try
         {
             var existingEntity = await _dbContext.CardActivities
-            .FirstOrDefaultAsync(ca => ca.UserId == userId && ca.CardId == cardId);
+                .FirstOrDefaultAsync(ca => ca.UserId == userId && ca.CardId == cardId);
 
             if (existingEntity != null)
             {
@@ -35,8 +35,8 @@ public class CardsDataProvider : ICardsDataProvider
             }
 
             // Make sure that this user has access to this set.
-            var hasAccess = await UserHasAccessToCard(userId, cardId, cancellationToken);
-            if (!hasAccess)
+            var card = await GetCardAsync(userId, cardId, cancellationToken);
+            if (card == null)
             {
                 return false;
             }
@@ -51,6 +51,9 @@ public class CardsDataProvider : ICardsDataProvider
 
             _dbContext.Add(activity);
             await _dbContext.SaveChangesAsync(cancellationToken);
+
+            // Now update that they have voted.
+            await RecordUserHasVoted(userId, card, cancellationToken);
 
             return true;
         }
@@ -78,8 +81,8 @@ public class CardsDataProvider : ICardsDataProvider
             }
 
             // Make sure that this user has access to this set.
-            var hasAccess = await UserHasAccessToCard(userId, cardId, cancellationToken);
-            if (!hasAccess)
+            var card = await GetCardAsync(userId, cardId, cancellationToken);
+            if (card == null)
             {
                 return false;
             }
@@ -95,6 +98,9 @@ public class CardsDataProvider : ICardsDataProvider
             _dbContext.Add(activity);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
+            // Now update that they have voted.
+            await RecordUserHasVoted(userId, card, cancellationToken);
+
             return true;
         }
         catch (Exception ex)
@@ -105,10 +111,19 @@ public class CardsDataProvider : ICardsDataProvider
         return false;
     }
 
-    private async Task<bool> UserHasAccessToCard(long userId, long cardId, CancellationToken cancellationToken)
+    private async Task<CardEntity?> GetCardAsync(long userId, long cardId, CancellationToken cancellationToken)
     {
         return await _dbContext.Cards
-                        .Where(c => c.Id == cardId)
-                        .AnyAsync(c => c.Set.Members.Any(sm => sm.UserId == userId), cancellationToken);
+            .FirstOrDefaultAsync(c => c.Id == cardId && c.Set.Members.Any(sm => sm.UserId == userId), cancellationToken);
+    }
+
+    private async Task RecordUserHasVoted(long userId, CardEntity card, CancellationToken cancellationToken)
+    {
+        var setMember = await _dbContext.SetMembers.FirstOrDefaultAsync(sm => sm.SetId == card.SetId && sm.UserId == userId, cancellationToken);
+        if (setMember != null)
+        {
+            setMember.HasVoted = true;
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
     }
 }

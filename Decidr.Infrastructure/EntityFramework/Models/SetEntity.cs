@@ -54,7 +54,7 @@ public static class SetExtensions
             CreatorName = set.CreatorId.ToString(), // TODO Need to fetch creator name.
             ImageUrl = set.ImageUrl,
             Cards = set.Cards.Select(c => c.ToBusinessObject(userId)).ToList(),
-            IsUnread = setWithInfo.IsUnread
+            HasVoted = setWithInfo.HasVoted
         };
     }
 }

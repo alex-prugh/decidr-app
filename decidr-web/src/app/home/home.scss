@@ -7,14 +7,36 @@
 }
 
 .new-badge {
-    position: absolute;
-    top: 10px;        
-    right: 10px;     
-    background-color: #dc3545;
-    color: white;
-    padding: 3px 8px;
-    border-radius: 10px;
-    font-size: rem;
-    font-weight: bold;
-    z-index: 10;
+  position: absolute;
+  top: 10px; /* Positions the badge 10px from the top */
+  left: 10px; /* Positions the badge 10px from the left */
+  right: auto; /* Removes the 'right' property */
+  background-color: #dc3545;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.85rem; /* Corrected font-size property */
+  font-weight: bold;
+  z-index: 10;
+}
+
+.share-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  
+  background-color: rgba(0, 0, 0, 0.7); /* Black background with some transparency */
+  border: none;
+  border-radius: 5px; /* Slightly rounded corners */
+  
+  font-size: 1.25rem;
+  color: white; /* White icon/text color */
+  padding: 5px 8px; /* Add some padding around the icon */
+  
+  z-index: 10;
+  cursor: pointer;
+  
+  display: flex; /* Use flexbox for centering if you had text, good for icons too */
+  align-items: center;
+  justify-content: center;
 }

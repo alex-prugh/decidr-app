@@ -7,7 +7,7 @@ public class SetMemberEntity
 {
     public long SetId { get; set; }
     public long UserId { get; set; }
-    public bool IsUnread { get; set; }
+    public bool HasVoted { get; set; }
     public long? AddedById { get; set; }
     public DateTimeOffset CreateDate { get; set; } = DateTimeOffset.UtcNow;
 
@@ -21,7 +21,7 @@ public class SetMemberEntityConfiguration : IEntityTypeConfiguration<SetMemberEn
     {
         entity.HasKey(x => new { x.SetId, x.UserId }).HasName("SetMembers_pkey");
         entity.ToTable("SetMembers", "app");
-        entity.Property(x => x.IsUnread).HasColumnName("IsUnread");
+        entity.Property(x => x.HasVoted).HasColumnName("HasVoted");
         entity.Property(x => x.AddedById).HasColumnName("AddedById"); // TODO: Make this a nullable FK on Users
         entity.Property(x => x.CreateDate).HasColumnName("CreateDate");
 

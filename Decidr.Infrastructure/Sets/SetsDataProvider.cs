@@ -21,6 +21,26 @@ public class SetsDataProvider : ISetsDataProvider
         _logger = logger;
     }
 
+    public async Task<bool> AddMemberAsync(long setId, User user, CancellationToken cancellationToken)
+    {
+        var set = await _dbContext.Sets.Where(s => s.Id == setId).FirstOrDefaultAsync(cancellationToken);
+        if (set == null)
+        {
+            return false;
+        }
+
+        var newMember = new SetMemberEntity
+        {
+            SetId = set.Id,
+            UserId = user.Id,
+            HasVoted = false
+        };
+
+        _dbContext.Add(newMember);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
     public async Task<Set?> CreateAsync(string name, ICollection<Card> cards, long creatorUserId, CancellationToken cancellationToken = default)
     {
         try
@@ -124,7 +144,7 @@ public class SetsDataProvider : ISetsDataProvider
         return query.Select(sm => new SetWithUnreadInfo
         {
             Set = sm.Set,
-            IsUnread = sm.IsUnread
+            HasVoted = sm.HasVoted
         });
     }
 }

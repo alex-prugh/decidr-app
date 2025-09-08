@@ -8,17 +8,23 @@ public interface ISetsOperation
     public Task<List<Set>> GetAllSetsAsync(CancellationToken cancellationToken = default);
     public Task<Set?> GetSetAsync(long setId, CancellationToken cancellationToken = default);
     public Task<SetResult?> GetSetResultAsync(long setId, CancellationToken token = default);
+    public Task<bool> AddMemberAsync(long setId, string email, CancellationToken cancellationToken);
 }
 
 public class SetsOperation : ISetsOperation
 {
     private readonly ISetsDataProvider _setsDataProvider;
+    private readonly IUsersDataProvider _usersDataProvider;
     private readonly UserContext _userContext;
     private static readonly Random _random = new Random();
 
-    public SetsOperation(ISetsDataProvider setsDataProvider, UserContext userContext)
+    public SetsOperation(
+        ISetsDataProvider setsDataProvider, 
+        IUsersDataProvider usersDataProvider,
+        UserContext userContext)
     {
         _setsDataProvider = setsDataProvider;
+        _usersDataProvider = usersDataProvider;
         _userContext = userContext;
     }
 
@@ -59,8 +65,8 @@ public class SetsOperation : ISetsOperation
 
         var cardSummaries = cardSummariesForSet
             .OrderByDescending(c => c.Id == topCardId)
-            .ThenByDescending(c => c.Likes)
-            .ThenBy(c => c.Dislikes);
+            .ThenByDescending(c => c.Likes - c.Dislikes)
+            .ThenByDescending(c => c.Likes);
 
         var cardSummary = cardSummaries.FirstOrDefault(cs => cs.Id ==  topCardId);
         if (cardSummary != null)
@@ -73,5 +79,17 @@ public class SetsOperation : ISetsOperation
             Id = setId,
             CardSummaries = cardSummaries.ToList()
         };
+    }
+
+    public async Task<bool> AddMemberAsync(long setId, string email, CancellationToken cancellationToken)
+    {
+        var user = await _usersDataProvider.GetByEmailAsync(email, cancellationToken);
+        if (user == null)
+        {
+            return false;
+        }
+
+        var success = await _setsDataProvider.AddMemberAsync(setId, user, cancellationToken);
+        return success;
     }
 }

@@ -56,6 +56,15 @@ public class UsersDataProvider : IUsersDataProvider
         return user;
     }
 
+    public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
+    {
+        var dbUser = await _dbContext.Users
+            .Where(u => u.Email == email)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return dbUser?.ToBusinessObject();
+    }
+
     public async Task<User?> GetUserByIdAsync(long userId, CancellationToken cancellationToken = default)
     {
         var dbUser = await _dbContext.Users

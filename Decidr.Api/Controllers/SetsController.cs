@@ -51,4 +51,16 @@ public class SetsController : ControllerBase
         var setResult = await _setsOperation.GetSetResultAsync(id, cancellationToken);
         return setResult?.ToDto();
     }
+
+    [HttpPost("{id:long}/addMember")]
+    public async Task<ActionResult<bool>> AddMember(long id, AddMemberRequestDto request, CancellationToken cancellationToken = default)
+    {
+        var result = await _setsOperation.AddMemberAsync(id, request.Email, cancellationToken);
+        if (!result)
+        {
+            return NotFound();
+        }
+
+        return true;
+    }
 }

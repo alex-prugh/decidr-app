@@ -17,9 +17,13 @@
     @for (set of sets; track set.id) {
         <div class="col-md-4 mb-3">
             <div class="card position-relative">
-                @if (set.isUnread) {
-                    <span class="new-badge">NEW</span>
+                @if (!set.hasVoted) {
+                    <span class="new-badge">VOTE NOW</span>
                 }
+
+                <button class="share-icon" (click)="openShareModal(set.id)">
+                    Share
+                </button>
 
                 @if (set.imageUrl) {
                     <img [src]="set.imageUrl" class="card-img" alt="{{ set.name }}" />
@@ -52,3 +56,32 @@
     <button (click)="createPopularMoviesSet()" class="btn btn-primary btn-lg">Popular</button>
   </div>
 </div>
+
+@if (showShareModal) {
+  <div class="modal" [ngClass]="{'show': showShareModal}" tabindex="-1" style="display: block">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Share Set</h5>
+          <button type="button" class="btn-close" (click)="closeShareModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="shareEmail" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="shareEmail" [(ngModel)]="emailToShareWith" placeholder="name@example.com">
+          </div>
+          @if (shareSuccessMessage) {
+            <div class="alert alert-success">{{ shareSuccessMessage }}</div>
+          }
+          @if (shareErrorMessage) {
+            <div class="alert alert-danger">{{ shareErrorMessage }}</div>
+          }
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeShareModal()">Close</button>
+          <button type="button" class="btn btn-primary" (click)="shareSet()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
