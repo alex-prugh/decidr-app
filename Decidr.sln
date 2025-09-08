@@ -16,6 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decidr.Api.Tests", "tests\Decidr.Api.Tests\Decidr.Api.Tests.csproj", "{143D2206-C40C-4957-96EB-26F54AB08FCA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,9 +38,16 @@ Global
 		{308EA085-AA76-412D-8F22-EDBB051D70B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{308EA085-AA76-412D-8F22-EDBB051D70B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{308EA085-AA76-412D-8F22-EDBB051D70B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{143D2206-C40C-4957-96EB-26F54AB08FCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{143D2206-C40C-4957-96EB-26F54AB08FCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{143D2206-C40C-4957-96EB-26F54AB08FCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{143D2206-C40C-4957-96EB-26F54AB08FCA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{143D2206-C40C-4957-96EB-26F54AB08FCA} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F9E0A860-E3E0-4049-B2D4-8B993371C748}
