@@ -19,6 +19,9 @@ public class SetsController : ControllerBase
         _setsOperation = setsOperation;
     }
 
+    /// <summary>
+    /// Gets all of the sets that the logged-in user can view / vote on.
+    /// </summary>
     [HttpGet]
     [Authorize]
     public async Task<ActionResult<List<SetDto>>> GetAll(CancellationToken cancellationToken = default)
@@ -27,6 +30,9 @@ public class SetsController : ControllerBase
         return sets.Select(s => s.ToDto()).ToList();
     }
 
+    /// <summary>
+    /// Gets a single set by id.
+    /// </summary>
     [HttpGet("{id:long}")]
     [Authorize]
     public async Task<ActionResult<SetDto?>> GetById(long id, CancellationToken cancellationToken = default)
@@ -45,6 +51,9 @@ public class SetsController : ControllerBase
         return Ok(set.ToDto());
     }
 
+    /// <summary>
+    /// Returns the voting results of a set.
+    /// </summary>
     [HttpGet("{id:long}/results")]
     public async Task<ActionResult<SetResultDto?>> GetResults(long id, CancellationToken cancellationToken = default)
     {
@@ -52,6 +61,9 @@ public class SetsController : ControllerBase
         return setResult?.ToDto();
     }
 
+    /// <summary>
+    /// Adds a member to be able to view / vote on a set.
+    /// </summary>
     [HttpPost("{id:long}/addMember")]
     public async Task<ActionResult<bool>> AddMember(long id, AddMemberRequestDto request, CancellationToken cancellationToken = default)
     {

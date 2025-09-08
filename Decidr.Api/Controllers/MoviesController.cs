@@ -19,11 +19,17 @@ public class MoviesController : ControllerBase
         _moviesOperation = moviesOperation;
     }
 
+    /// <summary>
+    /// Grabs the most popular movies.
+    /// </summary>
+    /// <returns>A set of cards with the most popular movies</returns>
     [HttpGet("popular")]
     [Authorize]
     public async Task<ActionResult<SetDto?>> Get(CancellationToken cancellationToken = default)
     {
         var set = await _moviesOperation.GetPopularMoviesSetAsync(cancellationToken);
+
+        // If we're unable to grab the movies, something is wrong internally.
         if (set == null)
         {
             return StatusCode(500, "Internal server error");

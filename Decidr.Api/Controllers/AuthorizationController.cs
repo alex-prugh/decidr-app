@@ -12,6 +12,8 @@ namespace Decidr.Api.Controllers;
 [Route("api/auth")]
 public class AuthorizationController : ControllerBase
 {
+    public const string UserIdClaim = "user_id";
+
     private readonly IAuthorizationOperation _authOperation;
     private readonly IConfiguration _configuration;
 
@@ -23,6 +25,9 @@ public class AuthorizationController : ControllerBase
         _configuration = configuration;
     }
 
+    /// <summary>
+    /// Registers the user to use the Decidr app.
+    /// </summary>
     [HttpPost("register")]
     public async Task<IActionResult> Register(
         [FromBody] RegisterRequestDto request,
@@ -34,6 +39,10 @@ public class AuthorizationController : ControllerBase
             : BadRequest(new { message = "Unable to register successfully. Try again " });
     }
 
+    /// <summary>
+    /// Logs the user in.
+    /// </summary>
+    /// <returns>A valid JWT token that the client can use for this user.</returns>
     [HttpPost("login")]
     public async Task<IActionResult> Login(
         [FromBody] LoginRequestDto request,
@@ -45,19 +54,22 @@ public class AuthorizationController : ControllerBase
             return Unauthorized();
         }
 
-        var token = GenerateJwtToken(request.Username, user.Id);
+        var token = GenerateJwtToken(user.Id);
         return Ok(new { token });
     }
 
-    private string GenerateJwtToken(string username, long userId)
+    /// <summary>
+    /// Generates a valid JWT token for the user that's logging in. 
+    /// </summary>
+    private string GenerateJwtToken(long userId)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+        var jwtKey = _configuration["Jwt:Key"] ?? throw new ArgumentNullException("Unable to grab JWT key from config");
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, username),
-            new Claim("user_id", userId.ToString()),
+            new Claim(UserIdClaim, userId.ToString()),
         };
 
         var token = new JwtSecurityToken(
