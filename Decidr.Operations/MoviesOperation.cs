@@ -6,7 +6,10 @@ namespace Decidr.Operations;
 
 public interface IMoviesOperation
 {
-    public Task<Set?> GetPopularMoviesSetAsync(CancellationToken cancellationToken = default);
+    /// <summary>
+    /// Creates a set with the most popular movies.
+    /// </summary>
+    public Task<Set?> CreatePopularMoviesSetAsync(CancellationToken cancellationToken = default);
 }
 
 public class MoviesOperation : IMoviesOperation
@@ -28,7 +31,7 @@ public class MoviesOperation : IMoviesOperation
         _logger = logger;
     }
 
-    public async Task<Set?> GetPopularMoviesSetAsync(CancellationToken cancellationToken)
+    public async Task<Set?> CreatePopularMoviesSetAsync(CancellationToken cancellationToken)
     {
         var movies = await _moviesDataProvider.GetLatestPopularAsync(cancellationToken);
 

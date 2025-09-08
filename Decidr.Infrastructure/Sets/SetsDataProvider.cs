@@ -21,27 +21,39 @@ public class SetsDataProvider : ISetsDataProvider
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public async Task<bool> AddMemberAsync(long setId, User user, long addedByUserId, CancellationToken cancellationToken)
     {
-        var set = await _dbContext.Sets.Where(s => s.Id == setId).FirstOrDefaultAsync(cancellationToken);
-        if (set == null)
+        try
         {
-            return false;
+            var set = await _dbContext.Sets.Where(s => s.Id == setId).FirstOrDefaultAsync(cancellationToken);
+            if (set == null)
+            {
+                return false;
+            }
+
+            var newMember = new SetMemberEntity
+            {
+                SetId = set.Id,
+                UserId = user.Id,
+                HasVoted = false,
+                AddedById = addedByUserId,
+            };
+
+            _dbContext.Add(newMember);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Ran into error when adding a member to a set. Set id: {Sid} / New member user id: {Uid} / Added by user id: {AddedByUid}", setId, user.Id, addedByUserId);
         }
 
-        var newMember = new SetMemberEntity
-        {
-            SetId = set.Id,
-            UserId = user.Id,
-            HasVoted = false,
-            AddedById = addedByUserId,
-        };
+        return false;
 
-        _dbContext.Add(newMember);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        return true;
     }
 
+    // <inheritdoc />
     public async Task<Set?> CreateAsync(string name, ICollection<Card> cards, long creatorUserId, CancellationToken cancellationToken = default)
     {
         try
@@ -85,22 +97,25 @@ public class SetsDataProvider : ISetsDataProvider
         return null;
     }
 
-    public async Task<Set?> Get(long setId, long userId, CancellationToken cancellationToken = default)
+    // <inheritdoc />
+    public async Task<Set?> Get(long setId, long userId, bool includeCards = false, CancellationToken cancellationToken = default)
     {
-        var setEntity = await QuerySetsForUser(userId, true, setId)
+        var setEntity = await QuerySetsForUser(userId, includeCards, setId)
             .FirstOrDefaultAsync(cancellationToken);
 
         return setEntity?.ToBusinessObject(userId);
     }
 
-    public async Task<List<Set>> GetAllForUser(long userId, CancellationToken cancellationToken = default)
+    // <inheritdoc />
+    public async Task<List<Set>> GetAllForUser(long userId, bool includeCards = false, CancellationToken cancellationToken = default)
     {
-        var setEntities = await QuerySetsForUser(userId)
+        var setEntities = await QuerySetsForUser(userId, includeCards)
             .ToListAsync(cancellationToken);
 
         return setEntities.Select(s => s.ToBusinessObject(userId)).ToList();
     }
 
+    // <inheritdoc />
     public async Task<List<CardSummary>> GetCardActivities(long setId, long userId, CancellationToken cancellationToken = default)
     {
         var hasAccessToSet = await _dbContext.SetMembers.AnyAsync(sm => sm.SetId == setId && sm.UserId == userId, cancellationToken);

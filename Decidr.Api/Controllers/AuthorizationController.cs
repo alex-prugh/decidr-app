@@ -29,7 +29,7 @@ public class AuthorizationController : ControllerBase
     /// Registers the user to use the Decidr app.
     /// </summary>
     [HttpPost("register")]
-    public async Task<IActionResult> Register(
+    public async Task<IActionResult> RegisterAsync(
         [FromBody] RegisterRequestDto request,
         CancellationToken cancellationToken = default)
     {
@@ -44,7 +44,7 @@ public class AuthorizationController : ControllerBase
     /// </summary>
     /// <returns>A valid JWT token that the client can use for this user.</returns>
     [HttpPost("login")]
-    public async Task<IActionResult> Login(
+    public async Task<IActionResult> LoginAsync(
         [FromBody] LoginRequestDto request,
         CancellationToken cancellationToken = default)
     {

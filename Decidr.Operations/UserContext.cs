@@ -2,6 +2,9 @@
 
 namespace Decidr.Operations;
 
+/// <summary>
+/// Created once per client request to track the logged-in user's info (if applicable).
+/// </summary>
 public class UserContext
 {
     public User? Current { get; set; }

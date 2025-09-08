@@ -25,6 +25,7 @@ public class UsersDataProvider : IUsersDataProvider
         _logger = logger;
     }
 
+    /// <inheritdoc />
     public async Task<User?> CreateAsync(string username, string password, string name, string email, CancellationToken cancellationToken)
     {
         var user = await GetUserByUsernamePasswordAsync(username, password, cancellationToken);
@@ -56,6 +57,7 @@ public class UsersDataProvider : IUsersDataProvider
         return user;
     }
 
+    /// <inheritdoc />
     public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
     {
         var dbUser = await _dbContext.Users
@@ -65,6 +67,7 @@ public class UsersDataProvider : IUsersDataProvider
         return dbUser?.ToBusinessObject();
     }
 
+    /// <inheritdoc />
     public async Task<User?> GetUserByIdAsync(long userId, CancellationToken cancellationToken = default)
     {
         var dbUser = await _dbContext.Users
@@ -74,6 +77,7 @@ public class UsersDataProvider : IUsersDataProvider
         return dbUser?.ToBusinessObject();
     }
 
+    /// <inheritdoc />
     public async Task<User?> GetUserByUsernamePasswordAsync(string username, string password, CancellationToken cancellationToken)
     {
         var hashedPassword = _passwordEncryptionService.HashPassword(password);

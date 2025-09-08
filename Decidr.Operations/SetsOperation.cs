@@ -30,13 +30,13 @@ public class SetsOperation : ISetsOperation
 
     public async Task<List<Set>> GetAllSetsAsync(CancellationToken cancellationToken)
     {
-        var sets = await _setsDataProvider.GetAllForUser(_userContext.GetUserOrThrow().Id, cancellationToken);
+        var sets = await _setsDataProvider.GetAllForUser(_userContext.GetUserOrThrow().Id, false, cancellationToken);
         return sets;
     }
 
     public async Task<Set?> GetSetAsync(long setId, CancellationToken cancellationToken)
     {
-        var set = await _setsDataProvider.Get(setId, _userContext.GetUserOrThrow().Id, cancellationToken);
+        var set = await _setsDataProvider.Get(setId, _userContext.GetUserOrThrow().Id, true, cancellationToken);
         return set;
     }
 

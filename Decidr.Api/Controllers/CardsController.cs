@@ -23,7 +23,7 @@ public class CardsController : ControllerBase
     /// </summary>
     [HttpPost("{id:int}/like")]
     [Authorize]
-    public async Task<ActionResult<bool>> Like(long id, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<bool>> LikeAsync(long id, CancellationToken cancellationToken = default)
     {
         if (id <= 0)
         {
@@ -39,7 +39,7 @@ public class CardsController : ControllerBase
     /// </summary>
     [HttpPost("{id:long}/dislike")]
     [Authorize]
-    public async Task<ActionResult<bool>> Dislike(long id, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<bool>> DislikeAsync(long id, CancellationToken cancellationToken = default)
     {
         if (id <= 0)
         {

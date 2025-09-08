@@ -25,9 +25,9 @@ public class MoviesController : ControllerBase
     /// <returns>A set of cards with the most popular movies</returns>
     [HttpGet("popular")]
     [Authorize]
-    public async Task<ActionResult<SetDto?>> Get(CancellationToken cancellationToken = default)
+    public async Task<ActionResult<SetDto?>> GetPopularMoviesAsync(CancellationToken cancellationToken = default)
     {
-        var set = await _moviesOperation.GetPopularMoviesSetAsync(cancellationToken);
+        var set = await _moviesOperation.CreatePopularMoviesSetAsync(cancellationToken);
 
         // If we're unable to grab the movies, something is wrong internally.
         if (set == null)
