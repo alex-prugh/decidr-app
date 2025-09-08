@@ -28,7 +28,7 @@ public class AuthorizationController : ControllerBase
         [FromBody] RegisterRequestDto request,
         CancellationToken cancellationToken = default)
     {
-        var result = await _authOperation.RegisterUserAsync(request.Username, request.Password, cancellationToken);
+        var result = await _authOperation.RegisterUserAsync(request.Username, request.Password, request.Name, request.Email, cancellationToken);
         return result
             ? Ok(new { message = "User registered successfully" })
             : BadRequest(new { message = "Unable to register successfully. Try again " });

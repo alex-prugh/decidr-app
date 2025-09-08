@@ -3,6 +3,7 @@ using System;
 using Decidr.Infrastructure.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Decidr.Infrastructure.Migrations
 {
     [DbContext(typeof(DecidrDbContext))]
-    partial class DecidrDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250908011950_AddCardActivity")]
+    partial class AddCardActivity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,11 +159,6 @@ namespace Decidr.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreateDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("CreateDate");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("Email");
 
                     b.Property<string>("Name")
                         .IsRequired()

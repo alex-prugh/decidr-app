@@ -42,12 +42,12 @@ export class SetDetailComponent implements OnInit {
   }
 
   likeCard(cardId: number): void {
-    console.log(`Liked card with ID: ${cardId}`);
+    console.log(`Liked card with id: ${cardId}`);
     // Implement API call for liking a card here
   }
 
   dislikeCard(cardId: number): void {
-    console.log(`Disliked card with ID: ${cardId}`);
+    console.log(`Disliked card with id: ${cardId}`);
     // Implement API call for disliking a card here
   }
 

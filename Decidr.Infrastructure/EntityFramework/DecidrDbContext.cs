@@ -17,6 +17,7 @@ public class DecidrDbContext : DbContext
     internal virtual DbSet<SetEntity> Sets { get; set; } = null!;
     internal virtual DbSet<CardEntity> Cards { get; set; } = null!;
     internal virtual DbSet<SetMemberEntity> SetMembers { get; set; } = null!;
+    internal virtual DbSet<CardActivityEntity> CardActivities { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

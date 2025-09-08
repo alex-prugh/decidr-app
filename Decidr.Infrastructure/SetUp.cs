@@ -1,4 +1,5 @@
-﻿using Decidr.Infrastructure.EntityFramework;
+﻿using Decidr.Infrastructure.Cards;
+using Decidr.Infrastructure.EntityFramework;
 using Decidr.Infrastructure.Helpers;
 using Decidr.Infrastructure.Movies;
 using Decidr.Infrastructure.Sets;
@@ -18,6 +19,7 @@ public static class SetUp
         services.AddScoped<IUsersDataProvider, UsersDataProvider>();
         services.AddScoped<IMoviesDataProvider, MoviesDataProvider>();
         services.AddScoped<ISetsDataProvider, SetsDataProvider>();
+        services.AddScoped<ICardsDataProvider, CardsDataProvider>();
         services.AddHttpClient("TheMovieDb", client =>
         {
             client.BaseAddress = new Uri("https://api.themoviedb.org/3/");

@@ -12,7 +12,9 @@ public class CardEntity
     public string? Description { get; set; }
     public string? ImageUrl { get; set; }
     public DateTimeOffset CreateDate { get; set; } = DateTimeOffset.UtcNow;
+
     public virtual SetEntity Set { get; set; } = null!;
+    public virtual ICollection<CardActivityEntity> Activities { get; set; } = [];
 }
 
 public class CardEntityConfiguration : IEntityTypeConfiguration<CardEntity>

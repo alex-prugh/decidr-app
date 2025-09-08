@@ -13,6 +13,7 @@ export class RegisterComponent {
   username = '';
   password = '';
   name = '';
+  email = '';
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -20,7 +21,8 @@ export class RegisterComponent {
     this.http.post<any>('https://localhost:5001/api/auth/register', {
       username: this.username,
       password: this.password,
-      name: this.name
+      name: this.name,
+      email: this.email,
     }).subscribe({
       next: () => {
         alert('Registration successful! Please log in.');

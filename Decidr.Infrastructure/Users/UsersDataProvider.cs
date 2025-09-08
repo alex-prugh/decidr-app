@@ -25,7 +25,7 @@ public class UsersDataProvider : IUsersDataProvider
         _logger = logger;
     }
 
-    public async Task<User?> CreateAsync(string username, string password, CancellationToken cancellationToken)
+    public async Task<User?> CreateAsync(string username, string password, string name, string email, CancellationToken cancellationToken)
     {
         var user = await GetUserByUsernamePasswordAsync(username, password, cancellationToken);
         if (user != null)
@@ -39,7 +39,9 @@ public class UsersDataProvider : IUsersDataProvider
             var newUser = new UserEntity
             {
                 Username = username,
-                PasswordHash = hashedPassword
+                PasswordHash = hashedPassword,
+                Email = email,
+                Name = name,
             };
 
             _dbContext.Add(newUser);

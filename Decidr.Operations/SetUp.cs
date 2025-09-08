@@ -8,6 +8,7 @@ public static class SetUp
         services.AddScoped<IAuthorizationOperation, AuthorizationOperation>();
         services.AddScoped<IMoviesOperation, MoviesOperation>();
         services.AddScoped<ISetsOperation, SetsOperation>();
+        services.AddScoped<ICardsOperation, CardsOperation>();
         services.AddScoped<UserContext>();
         return services;
     }

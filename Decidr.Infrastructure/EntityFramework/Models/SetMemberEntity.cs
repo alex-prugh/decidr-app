@@ -34,5 +34,3 @@ public class SetMemberEntityConfiguration : IEntityTypeConfiguration<SetMemberEn
             .HasForeignKey(x => x.UserId);
     }
 }
-
-
