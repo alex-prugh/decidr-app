@@ -95,24 +95,56 @@ Some of the key technical decisions made for this project include:
   - I haven't worked with Angular before, so I wanted to give it a try! It was really fun learning about this framework.
   - I have worked with Ember JS before, as a full stack developer at Alarm.com, so I do have experience with a JS framework. 
   - There's a lot more I need to learn about Angular, and I'm sure the code can be cleaned up a bit and simplified! I'd also like to add unit tests to the front end to test out the components.
-- **Database:** [Postgres/MongoDB/etc. and reasoning]  
-- **Architecture:** [Monolith, Microservices, Layered Architecture, etc.]  
-- **Authentication / Authorization:** [JWT, OAuth2, etc.]  
-- **Testing Strategy:** [Unit tests, integration tests, mocking frameworks, etc.]  
+- **Database: Postgres**
+  - I am working with a Postgres DB for my current project at work, but I have also had experience with MySQL. 
+- **Authentication / Authorization: JWT Bearer Token**: I kept it simple for now. This bearer is valid for an hour and doesn't have an issuer source. I'd like to add a much more complex auth system as I continue to develop this app (refreshing tokens automatically, potentially an external auth service, tetc.)
+- **Testing Strategy: /tests folder**: This folder contains 2 test projects to test out Decidr.Api and Decidr.Operations. In the future, I want to add tests around the infrastructure, including integration tests to test out persisting and retrieving data (i.e. Postgres in a local container). I'd also like to add front-end tests.
 
 These decisions were made to balance scalability, maintainability, and developer productivity.
+
+### Repository Structure
+Here is the folder structure of my repo. I'll explain why I organized it this way.
+
+#### `Decidr.Api`
+This is the ASP.NET Core Web API. In this project I've created controllers for each Decidr endpoint, included adding security for these endpoints (requiring valid Bearer token).
+The bearer token contains the information of the logged-in user's user id.
+<br>
+To help out with Authorization, I created an attribute `RequiresUserContextAttribute` that I put on each controller that defined
+APIs that required a logged-in user. This attribute looks for the user id from the JWT token and fetches that user from the DB. We then have access to
+the logged-in user's information for the rest of the request.
+
+#### `Decidr.Operations`
+The business logic layer. This is where I added the logic to process requests. Importantly, this project has a folder called `Infrastructure`. `Infrastructure` contains generic interfaces with methods to grab data from external sources (the db, third party APIs, etc).
+<br>
+This allows for the operation layer to be completely independent from infrastructure implementation. For example, if I ever needed to update the third party API to fetch movie information from, the operation project wouldn't need to change. All I'd need to do is update the implementation of that interface, which would live in the `Decidr.Infrastructure` project.
+
+#### `Decidr.Infrastructure`
+Gets data from external sources (Postgres, third party APIs, etc.). It has `Decidr.Operations` as a project reference to have access to the interfaces mentioned above. This project then implements those interfaces.
+<br>
+This project sets up EF Core and handles querying / persisting to Postgres.
+<br>
+Right now, we are fetching movie information from this third party movie API (`TheMovieDb`).
+
+#### `decidr-web`
+The Angular app. I'm not yet familiar with the best practices, but I put each component in its own folder and have a `shared` folder for shared interfaces (i.e. `Set`).
 
 ---
 
 ## Next Steps
-While the project is functional, there are areas for improvement:
+While the app works, it's still in the early stages. Here are some things I'd like to do:
 
-- **Documentation:** Expand usage examples and API references  
+- **Funcationality:** Here are some features I'd like to add:
+  - Support 'deleting' sets (soft deletes)
+  - Add more ways to create movie sets. Have the user select a category (comedies), search for a movie term, Best Picture category, etc.
+  - Add other types of sets. I'd like to add a section for 'restaurants' and query the Yelp API to allow users to vote on where to eat.
+  - Add support to 'get more' cards for each set. Right now we only get a fixed amount of movies for each set. I want to add a way to request more.
+  - Add about & settings pages
+- Infrastructure improvements:
+  - An important improvement would be to remove any sensitive tokens / JWT key from the app settings. I only added it there for local development, but it doesn't belong there. It belongs in some sort of secrets manager (Vault, AWS Secrets Manager, etc).
+  - I'd like to fully deploy this app and host on AWS. 
 - **Error Handling:** Improve consistency in handling failures  
 - **Testing Coverage:** Increase unit/integration test coverage  
 - **Performance:** Optimize database queries and API response times  
-- **Dev Experience:** Add Docker support, CI/CD pipelines, or local dev tooling  
 
-These improvements will make the project more robust, easier to maintain, and friendlier for new contributors.
 
 ---
