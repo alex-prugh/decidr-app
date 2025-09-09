@@ -4,9 +4,8 @@
 
 @if (set) {
   <div class="container mt-4 text-center">
-    <h1>Time to vote!</h1>
+    <h1>Time to vote on <i><b>{{ set.name }}</b></i> !</h1>
     <p>Vote on which movies you like and dislike below.</p>
-    <h2>Name: {{ set.name }}</h2>
     
     <div class="d-flex justify-content-center align-items-center">
       <button class="btn btn-lg btn-outline-secondary me-3" (click)="previousCard()" [disabled]="currentCardIndex === 0">

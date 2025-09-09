@@ -66,30 +66,15 @@ public class SetsOperation : ISetsOperation
         if (cardSummariesForSet == null || !cardSummariesForSet.Any())
             return null;
 
-        var maxLikes = cardSummariesForSet.Max(c => c.Likes);
-        var topCardId = (long)-1;
-
-        // No votes yet
-        if (maxLikes == 0)
-        {
-            topCardId = -1;
-        }
-        else
-        {
-            var topCards = cardSummariesForSet.Where(c => c.Likes == maxLikes).ToList();
-            var topCard = topCards[_random.Next(topCards.Count)];
-            topCardId = topCard.Id;
-        }
-
         var cardSummaries = cardSummariesForSet
-            .OrderByDescending(c => c.Id == topCardId)
-            .ThenByDescending(c => c.Likes - c.Dislikes)
-            .ThenByDescending(c => c.Likes);
+            .OrderByDescending(c => c.Likes - c.Dislikes)
+            .ThenByDescending(c => c.Likes)
+            .ThenBy(c => c.Id); // If there's the same amount of likes and dislikes then just pick by id.
 
-        var cardSummary = cardSummaries.FirstOrDefault(cs => cs.Id ==  topCardId);
-        if (cardSummary != null)
+        var topCard = cardSummaries.FirstOrDefault();
+        if (topCard != null)
         {
-            cardSummary.IsSuggested = true;
+            topCard.IsSuggested = true;
         }
 
         return new SetResult
