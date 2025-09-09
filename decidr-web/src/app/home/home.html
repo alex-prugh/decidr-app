@@ -40,7 +40,7 @@
                         <h5 class="card-title">{{ set.name }}</h5>
                         <div class="mt-auto d-flex gap-2">
                             <a [routerLink]="['/sets', set.id]" class="btn btn-primary flex-fill">View Set</a>
-                            <a [routerLink]="['/sets', set.id, 'result']" class="btn btn-success flex-fill">View Results</a>
+                            <button class="btn btn-success flex-fill" (click)="viewResults(set)">View Results</button>
                             <button class="btn btn-danger" (click)="deleteSet(set.id)">
                                 🗑️
                             </button>
@@ -96,4 +96,4 @@
 
 <hr class="mt-5" />
 
-Alex Prugh 2025
+Alex Prugh 2025 hi

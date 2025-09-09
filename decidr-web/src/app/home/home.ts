@@ -96,4 +96,12 @@ export class HomeComponent implements OnInit {
   deleteSet(setId: number) : void {
     
   }
+
+  viewResults(set: Set): void {
+    if (!set.hasVoted) {
+      alert("Please vote at least one card in this set before viewing results.");
+    } else {
+      this.router.navigate(['/sets', set.id, 'result']);
+    }
+  }
 }
