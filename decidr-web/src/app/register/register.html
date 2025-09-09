@@ -1,0 +1,46 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <h3>Register</h3>
+      <form (ngSubmit)="register()">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input [(ngModel)]="name" name="name" class="form-control" required />
+          @if (validationErrors?.['Name']) {
+            @for (error of validationErrors['Name']; track $index) {
+              <div class="text-danger">{{ error }}</div>
+            }
+          }
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input [(ngModel)]="email" name="email" class="form-control" required />
+          @if (validationErrors?.['Email']) {
+            @for (error of validationErrors['Email']; track $index) {
+              <div class="text-danger">{{ error }}</div>
+            }
+          }
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input [(ngModel)]="username" name="username" class="form-control" required />
+          @if (validationErrors?.['Username']) {
+            @for (error of validationErrors['Username']; track $index) {
+              <div class="text-danger">{{ error }}</div>
+            }
+          }
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input [(ngModel)]="password" name="password" type="password" class="form-control" required />
+          @if (validationErrors?.['Password']) {
+            @for (error of validationErrors['Password']; track $index) {
+              <div class="text-danger">{{ error }}</div>
+            }
+          }
+        </div>
+        <button type="submit" class="btn btn-success w-100">Register</button>
+      </form>
+    </div>
+  </div>
+</div>
