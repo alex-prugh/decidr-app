@@ -1,4 +1,3 @@
-// src/app/set-detail/set-detail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -56,7 +55,7 @@ export class SetDetailComponent implements OnInit {
         if (success) {
           card.isLiked = true;
           card.isDisliked = false;
-          // After a vote, go to the next card
+          // After like, go to the next card
           this.nextCard();
         }
       },
@@ -73,7 +72,7 @@ export class SetDetailComponent implements OnInit {
         if (success) {
           card.isLiked = false;
           card.isDisliked = true;
-          // After a vote, go to the next card
+          // After dislike, go to the next card
           this.nextCard();
         }
       },
