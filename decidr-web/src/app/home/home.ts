@@ -60,6 +60,21 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  createTopRatedMoviesSet() : void {
+    // Make a POST request to the API
+    this.http.get<Set>('https://localhost:5001/api/movies/top-rated', {})
+      .subscribe({
+        next: (newSet) => {
+          // On success, navigate to the new set's detail page
+          this.router.navigate(['/sets', newSet.id]);
+        },
+        error: (err) => {
+          console.error('Error creating top rated movies set:', err);
+          alert('Failed to get top rated movies.');
+        }
+      });
+  }
+
   openShareModal(setId: number) : void {
     this.selectedSetId = setId;
     this.showShareModal = true;
@@ -94,7 +109,7 @@ export class HomeComponent implements OnInit {
   }
 
   deleteSet(setId: number) : void {
-    
+    alert("Not implemented yet :(");
   }
 
   viewResults(set: Set): void {
