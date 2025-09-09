@@ -160,10 +160,10 @@ While the app works, it's still in the early stages. Here are some things I'd li
   - Add about & settings pages
 - Infrastructure improvements:
   - An important improvement would be to remove any sensitive tokens / JWT key from the app settings. I only added it there for local development, but it doesn't belong there. It belongs in some sort of secrets manager (Vault, AWS Secrets Manager, etc).
-  - I'd like to fully deploy this app and host on AWS. 
+  - I'd like to fully deploy this app and host on AWS.
 - **Error Handling:** Improve consistency in handling failures  
 - **Testing Coverage:** Increase unit/integration test coverage  
-- **Performance:** Optimize database queries and API response times  
+- **Performance:** Optimize database queries and API response times. I'd like to add indexes to speed up queries.
 
 
 ---
