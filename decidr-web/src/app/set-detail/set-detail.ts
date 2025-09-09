@@ -18,6 +18,7 @@ import { Card } from '../shared/models/card';
 })
 export class SetDetailComponent implements OnInit {
   set: Set | undefined;
+  currentCardIndex = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,8 +43,8 @@ export class SetDetailComponent implements OnInit {
       },
       (error) => {
         console.error('Error fetching set data:', error);
-        alert('An error occurred. Redirecting to the home page.'); // Display a simple alert
-        this.router.navigate(['/home']); // Redirect to the home page route ('/')
+        alert('An error occurred. Redirecting to the home page.');
+        this.router.navigate(['/home']);
       }
     );
   }
@@ -55,6 +56,8 @@ export class SetDetailComponent implements OnInit {
         if (success) {
           card.isLiked = true;
           card.isDisliked = false;
+          // After a vote, go to the next card
+          this.nextCard();
         }
       },
       error: (err) => {
@@ -70,12 +73,26 @@ export class SetDetailComponent implements OnInit {
         if (success) {
           card.isLiked = false;
           card.isDisliked = true;
+          // After a vote, go to the next card
+          this.nextCard();
         }
       },
       error: (err) => {
         console.error('Error disliking card:', err);
       }
     });
+  }
+
+  nextCard(): void {
+    if (this.set && this.currentCardIndex < this.set.cards.length - 1) {
+      this.currentCardIndex++;
+    }
+  }
+
+  previousCard(): void {
+    if (this.currentCardIndex > 0) {
+      this.currentCardIndex--;
+    }
   }
 
   goHome(): void {

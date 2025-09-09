@@ -3,51 +3,47 @@
 </div>
 
 @if (set) {
-    <div class="container mt-4">
-        <h1>Time to vote!</h1>
-        Vote on which movies you like and dislike below.
-        <h2>Name: {{ set.name }}</h2>
+  <div class="container mt-4 text-center">
+    <h1>Time to vote!</h1>
+    <p>Vote on which movies you like and dislike below.</p>
+    <h2>Name: {{ set.name }}</h2>
+    
+    <div class="d-flex justify-content-center align-items-center">
+      <button class="btn btn-lg btn-outline-secondary me-3" (click)="previousCard()" [disabled]="currentCardIndex === 0">
+        ⬅️
+      </button>
 
-        <div class="row">
-            @for (card of set.cards; track card.id) {
-            <div class="col-md-6 mb-4">
-                <div class="card"
-                    [ngClass]="{ 'liked-card-border': card.isLiked, 'disliked-card-border': card.isDisliked }">
-                @if (card.imageUrl) {
-                    <img [src]="card.imageUrl" class="card-img-top" alt="{{ card.title }}" />
-                }
-                <div class="card-body">
-                    <h5 class="card-title">{{ card.title }}</h5>
-                    <p class="card-text">{{ card.description }}</p>
-                    <div class="d-flex justify-content-between mt-3">
-                    <button
-                        class="btn"
-                        [ngClass]="{ 'btn-success': card.isLiked, 'btn-outline-success': !card.isLiked }"
-                        (click)="likeCard(card)">
-                        Like
-                    </button>
-                    <button
-                        class="btn"
-                        [ngClass]="{ 'btn-danger': card.isDisliked, 'btn-outline-danger': !card.isDisliked }"
-                        (click)="dislikeCard(card)">
-                        Dislike
-                    </button>
-                    </div>
-                </div>
-                </div>
+      <div class="card" style="width: 25rem;">
+        @if (set.cards[currentCardIndex]) {
+          @if (set.cards[currentCardIndex].imageUrl) {
+            <img [src]="set.cards[currentCardIndex].imageUrl" class="card-img-top" alt="{{ set.cards[currentCardIndex].title }}" />
+          }
+          <div class="card-body">
+            <h5 class="card-title">{{ set.cards[currentCardIndex].title }}</h5>
+            <p class="card-text">{{ set.cards[currentCardIndex].description }}</p>
+            <div class="d-flex justify-content-between">
+              <button
+                class="btn"
+                [ngClass]="{ 'btn-success': set.cards[currentCardIndex].isLiked, 'btn-outline-success': !set.cards[currentCardIndex].isLiked }"
+                (click)="likeCard(set.cards[currentCardIndex])">
+                <i class="fa-solid fa-thumbs-up"></i> Like
+              </button>
+              <button
+                class="btn"
+                [ngClass]="{ 'btn-danger': set.cards[currentCardIndex].isDisliked, 'btn-outline-danger': !set.cards[currentCardIndex].isDisliked }"
+                (click)="dislikeCard(set.cards[currentCardIndex])">
+                <i class="fa-solid fa-thumbs-down"></i> Dislike
+              </button>
             </div>
-            } @empty {
-            <div class="col-12">
-                <div class="alert alert-info">No cards found in this set.</div>
-            </div>
-            }
-        </div>
+          </div>
+        }
+      </div>
+
+      <button class="btn btn-lg btn-outline-secondary ms-3" (click)="nextCard()" [disabled]="!set || currentCardIndex === set.cards.length - 1">
+        ➡️
+      </button>
     </div>
+  </div>
+} @else {
+  <h1>Loading...</h1>
 }
-@else {
-    <h1>Loading...</h1>
-}
-
-<div class="container mt-3 mb-5">
-  <button (click)="goHome()" class="btn btn-secondary">Go Back</button>
-</div>
