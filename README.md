@@ -1,7 +1,8 @@
 # Decidr App
 
 ---
-Decidr is the Tinder for decisions. Time to see what plans you and your loved ones vote for anonymously.
+Decidr is the Tinder for decisions. Time to see what plans you and your loved ones vote for anonymously. We create sets of cards for you and your friends to vote on. 
+These sets could contain movie ideas to watch for the night, restaurants to eat at, etc. At any point, you'll be able to view how many votes each option received and the final decision!
 
 ---
 
@@ -88,6 +89,23 @@ Before running the app locally, make sure you have the following installed:
      ```
 ---
 
+## How to use the app
+
+Since Decidr is in its early stages, you'll need to follow specific steps to test it out. Follow these steps to see how Decidr works.
+
+1. Open up the app and click 'Register' in the nav bar.
+1. Create a new user. Let's call this user, User A.
+1. Create another new user, let's call that user User B. Make sure to remember the email you provided for that user.
+1. Log into the app as User A.
+1. Look for the 'Create Set' section and select 'Popular'. This will create a new set of popular movies for you to vote on.
+1. Click to 'view' set. This will allow you to flip through each card and vote on it.
+1. After voting, go back 'Home'. Click to 'share' this set and type in the email of User B.
+1. Logout and Login as User B.
+1. You should see the popular set that was just shared with User B. You shouldn't be able to view results until you vote. Vote on that set.
+1. Click 'View Results'. You should see the tallied votes for each movie card and the movie we've chosen for you based on the votes!
+
+---
+
 ## Technical Decisions
 Some of the key technical decisions made for this project include:
 
@@ -134,6 +152,7 @@ The Angular app. I'm not yet familiar with the best practices, but I put each co
 While the app works, it's still in the early stages. Here are some things I'd like to do:
 
 - **Funcationality:** Here are some features I'd like to add:
+  - Make the app a lot more user friendly and have better design. It's pretty basic right now. The icon always brings you to the Login page, even if you're logged in.
   - Support 'deleting' sets (soft deletes)
   - Add more ways to create movie sets. Have the user select a category (comedies), search for a movie term, Best Picture category, etc.
   - Add other types of sets. I'd like to add a section for 'restaurants' and query the Yelp API to allow users to vote on where to eat.
