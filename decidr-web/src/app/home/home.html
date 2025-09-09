@@ -60,9 +60,10 @@
         <h2>Create new sets</h2>
         <p>Select an option below to create your own decision set. You'll be able to vote on options, share your set with friends, and finally decide what to do!</p>
         <h3 class="mt-4">🍿 Movies</h3>
-        <button (click)="createPopularMoviesSet()" class="popular-button btn btn-primary btn-lg">🔥 Popular</button>
-    </div>
-  </div>
+        <div class="d-flex gap-3">
+            <button (click)="createPopularMoviesSet()" class="set-button btn btn-primary btn-lg">🔥 Popular</button>
+            <button (click)="createTopRatedMoviesSet()" class="set-button btn btn-lg" style="background-color: green;">⭐ Top Rated</button>
+        </div>
 </div>
 
 @if (showShareModal) {

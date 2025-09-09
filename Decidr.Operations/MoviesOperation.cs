@@ -10,6 +10,11 @@ public interface IMoviesOperation
     /// Creates a set with the most popular movies.
     /// </summary>
     public Task<Set?> CreatePopularMoviesSetAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Creates a set with the top rated movies.
+    /// </summary>
+    public Task<Set?> CreateTopRatedMoviesSetAsync(CancellationToken cancellationToken = default);
 }
 
 public class MoviesOperation : IMoviesOperation
@@ -37,6 +42,15 @@ public class MoviesOperation : IMoviesOperation
         var movies = await _moviesDataProvider.GetLatestPopularAsync(cancellationToken);
 
         var newSet = await CreateSetFromMoviesAsync($"Popular Movies: {DateTime.Today.ToString("yyyy-MM-dd")}", movies, cancellationToken);
+        return newSet;
+    }
+
+    /// <inheritdoc />
+    public async Task<Set?> CreateTopRatedMoviesSetAsync(CancellationToken cancellationToken)
+    {
+        var movies = await _moviesDataProvider.GetTopRatedAsync(cancellationToken);
+
+        var newSet = await CreateSetFromMoviesAsync($"Top Rated Movies: {DateTime.Today.ToString("yyyy-MM-dd")}", movies, cancellationToken);
         return newSet;
     }
 

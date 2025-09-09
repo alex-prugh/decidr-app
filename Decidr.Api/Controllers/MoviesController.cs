@@ -37,4 +37,23 @@ public class MoviesController : ControllerBase
 
         return set?.ToDto();
     }
+
+    /// <summary>
+    /// Grabs the top rated movies.
+    /// </summary>
+    /// <returns>A set of cards with the top rated movies</returns>
+    [HttpGet("top-rated")]
+    [Authorize]
+    public async Task<ActionResult<SetDto?>> GetTopRatedMoviesAsync(CancellationToken cancellationToken = default)
+    {
+        var set = await _moviesOperation.CreateTopRatedMoviesSetAsync(cancellationToken);
+
+        // If we're unable to grab the movies, something is wrong internally.
+        if (set == null)
+        {
+            return StatusCode(500, "Internal server error");
+        }
+
+        return set?.ToDto();
+    }
 }

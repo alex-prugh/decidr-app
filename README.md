@@ -86,7 +86,7 @@ Before running the app locally, make sure you have the following installed:
    ng serve
    ```
    - The frontend should now be running at [http://localhost:4200](http://localhost:4200).
-     ```
+ 
 ---
 
 ## How to use the app
@@ -118,8 +118,6 @@ Some of the key technical decisions made for this project include:
 - **Authentication / Authorization: JWT Bearer Token**: I kept it simple for now. This bearer is valid for an hour and doesn't have an issuer source. I'd like to add a much more complex auth system as I continue to develop this app (refreshing tokens automatically, potentially an external auth service, tetc.)
 - **Testing Strategy: /tests folder**: This folder contains 2 test projects to test out Decidr.Api and Decidr.Operations. In the future, I want to add tests around the infrastructure, including integration tests to test out persisting and retrieving data (i.e. Postgres in a local container). I'd also like to add front-end tests.
 
-These decisions were made to balance scalability, maintainability, and developer productivity.
-
 ### Repository Structure
 Here is the folder structure of my repo. I'll explain why I organized it this way.
 
@@ -129,19 +127,23 @@ The bearer token contains the information of the logged-in user's user id.
 <br>
 To help out with Authorization, I created an attribute `RequiresUserContextAttribute` that I put on each controller that defined
 APIs that required a logged-in user. This attribute looks for the user id from the JWT token and fetches that user from the DB. We then have access to
-the logged-in user's information for the rest of the request.
+the logged-in user's information for the rest of the request. I'm not sure if I fully love having a roundtrip to the DB for each request. In the future, I'd consider only having the user id in the context, or adding some distributed cache to hold user info (Elasticache on AWS).
+<br>
+I am using FluentValidation for complex DTOs. I really like this package because it gives helpful validation error messages out of the box and is easy to set up. However, this could also be made in-house to reduce the amount of package dependencies.
 
 #### `Decidr.Operations`
 The business logic layer. This is where I added the logic to process requests. Importantly, this project has a folder called `Infrastructure`. `Infrastructure` contains generic interfaces with methods to grab data from external sources (the db, third party APIs, etc).
 <br>
 This allows for the operation layer to be completely independent from infrastructure implementation. For example, if I ever needed to update the third party API to fetch movie information from, the operation project wouldn't need to change. All I'd need to do is update the implementation of that interface, which would live in the `Decidr.Infrastructure` project.
+I like this design because it's easy to write unit tests for the operation layer. However, this introduces coupling between the infra and operations layer. I could add an abstractions project to reduce this coupling, and I think I would for a larger app.
+<br>
 
 #### `Decidr.Infrastructure`
 Gets data from external sources (Postgres, third party APIs, etc.). It has `Decidr.Operations` as a project reference to have access to the interfaces mentioned above. This project then implements those interfaces.
 <br>
 This project sets up EF Core and handles querying / persisting to Postgres.
 <br>
-Right now, we are fetching movie information from this third party movie API (`TheMovieDb`).
+Right now, we are fetching movie information from this third party movie API (`TheMovieDb`). We could leverage AI to get options for more than just movies instead of relying on and maintaining multiple third party APIs / versions, etc.
 
 #### `decidr-web`
 The Angular app. I'm not yet familiar with the best practices, but I put each component in its own folder and have a `shared` folder for shared interfaces (i.e. `Set`).
