@@ -83,4 +83,50 @@ public class MoviesControllerTests
 
         Assert.Equal(500, statusCodeResult.StatusCode);
     }
+
+    [Fact]
+    public async Task GetMoviesBySearchTermAsync_WithValidMovies_ReturnsSetDto()
+    {
+        var controller = CreateController();
+        var set = new Set
+        {
+            Id = 1,
+            Name = "Test Set",
+            Cards = new List<Card>()
+        };
+
+        _subMoviesOperation.CreateSearchTermMoviesSetAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(set);
+
+        var result = await controller.GetMoviesBySearchTermAsync("hi");
+
+        Assert.IsType<ActionResult<SetDto?>>(result);
+        Assert.IsType<SetDto>(result.Value);
+    }
+
+    [Fact]
+    public async Task GetMoviesBySearchTermAsync_WithNoMovies_ReturnsInternalServerError()
+    {
+        var controller = CreateController();
+
+        _subMoviesOperation.CreateSearchTermMoviesSetAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns((Set?)null);
+
+        var result = await controller.GetMoviesBySearchTermAsync("hi");
+        var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);
+
+        Assert.Equal(500, statusCodeResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetMoviesBySearchTermAsync_WithNoSearchTerm_ReturnsBadRequest()
+    {
+        var controller = CreateController();
+
+        _subMoviesOperation.CreateSearchTermMoviesSetAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns((Set?)null);
+
+        var result = await controller.GetMoviesBySearchTermAsync("");
+        Assert.IsType<BadRequestObjectResult>(result.Result);
+    }
 }

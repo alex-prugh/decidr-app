@@ -15,6 +15,11 @@ public interface IMoviesOperation
     /// Creates a set with the top rated movies.
     /// </summary>
     public Task<Set?> CreateTopRatedMoviesSetAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Creates a movie set of movies related to a given search term.
+    /// </summary>
+    public Task<Set?> CreateSearchTermMoviesSetAsync(string searchTerm, CancellationToken cancellationToken = default);
 }
 
 public class MoviesOperation : IMoviesOperation
@@ -51,6 +56,15 @@ public class MoviesOperation : IMoviesOperation
         var movies = await _moviesDataProvider.GetTopRatedAsync(cancellationToken);
 
         var newSet = await CreateSetFromMoviesAsync($"Top Rated Movies: {DateTime.Today.ToString("yyyy-MM-dd")}", movies, cancellationToken);
+        return newSet;
+    }
+
+    /// <inheritdoc />
+    public async Task<Set?> CreateSearchTermMoviesSetAsync(string searchTerm, CancellationToken cancellationToken = default)
+    {
+        var movies = await _moviesDataProvider.SearchAsync(searchTerm, cancellationToken);
+
+        var newSet = await CreateSetFromMoviesAsync($"Movies about '{searchTerm}': {DateTime.Today.ToString("yyyy-MM-dd")}", movies, cancellationToken);
         return newSet;
     }
 

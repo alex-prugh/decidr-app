@@ -63,8 +63,33 @@
         <div class="d-flex gap-3">
             <button (click)="createPopularMoviesSet()" class="set-button btn btn-primary btn-lg">🔥 Popular</button>
             <button (click)="createTopRatedMoviesSet()" class="set-button btn btn-lg" style="background-color: green;">⭐ Top Rated</button>
+            <button (click)="openSearchModal()" class="set-button btn btn-info btn-lg">🔍 Search</button>
         </div>
 </div>
+
+@if (showSearchModal) {
+  <div class="modal" [ngClass]="{'show': showSearchModal}" tabindex="-1" style="display: block">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create Set from Search</h5>
+          <button type="button" class="btn-close" (click)="closeSearchModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="movieSearchTerm" class="form-label">Search movies by search term</label>
+            <input type="text" class="form-control" id="movieSearchTerm" [(ngModel)]="movieSearchTerm" placeholder="e.g., Harry Potter">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeSearchModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="createSearchTermMovieSet()">Search</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
 
 @if (showShareModal) {
     <div class="modal" [ngClass]="{'show': showShareModal}" tabindex="-1" style="display: block">
