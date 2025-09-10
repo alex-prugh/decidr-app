@@ -22,6 +22,8 @@ export class HomeComponent implements OnInit {
   emailToShareWith = '';
   shareSuccessMessage = '';
   shareErrorMessage = '';
+  showSearchModal = false;
+  movieSearchTerm = '';
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -47,7 +49,7 @@ export class HomeComponent implements OnInit {
 
   createPopularMoviesSet() : void {
     // Make a POST request to the API
-    this.http.get<Set>('https://localhost:5001/api/movies/popular', {})
+    this.http.get<Set>('https://localhost:5001/api/movies/popular')
       .subscribe({
         next: (newSet) => {
           // On success, navigate to the new set's detail page
@@ -62,7 +64,7 @@ export class HomeComponent implements OnInit {
 
   createTopRatedMoviesSet() : void {
     // Make a POST request to the API
-    this.http.get<Set>('https://localhost:5001/api/movies/top-rated', {})
+    this.http.get<Set>('https://localhost:5001/api/movies/top-rated')
       .subscribe({
         next: (newSet) => {
           // On success, navigate to the new set's detail page
@@ -73,6 +75,31 @@ export class HomeComponent implements OnInit {
           alert('Failed to get top rated movies.');
         }
       });
+  }
+
+  openSearchModal() {
+    this.showSearchModal = true;
+  }
+
+  closeSearchModal() {
+    this.showSearchModal = false;
+    this.movieSearchTerm = '';
+  }
+
+  createSearchTermMovieSet() {
+    if (!this.movieSearchTerm) return;
+    const url = `https://localhost:5001/api/movies/search?searchTerm=${this.movieSearchTerm}`;
+    this.http.get<Set>(url).subscribe({
+      next: (data) => {
+        this.sets.unshift(data);
+        this.closeSearchModal();
+        this.router.navigate(['/sets', data.id]);
+      },
+      error: (err) => {
+        console.error('Error creating search term set:', err);
+        alert('Failed to create set from search term.');
+      }
+    });
   }
 
   openShareModal(setId: number) : void {

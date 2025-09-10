@@ -56,4 +56,28 @@ public class MoviesController : ControllerBase
 
         return set?.ToDto();
     }
+
+    /// <summary>
+    /// Gets movies given a search term.
+    /// </summary>
+    /// <returns>A set of cards associated with a search term</returns>
+    [HttpGet("search")]
+    [Authorize]
+    public async Task<ActionResult<SetDto?>> GetMoviesBySearchTermAsync([FromQuery] string searchTerm, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrEmpty(searchTerm))
+        {
+            return BadRequest("Provided searchTerm must be provided and not empty");
+        }
+
+        var set = await _moviesOperation.CreateSearchTermMoviesSetAsync(searchTerm, cancellationToken);
+
+        // If we're unable to grab the movies, something is wrong internally.
+        if (set == null)
+        {
+            return StatusCode(500, "Internal server error");
+        }
+
+        return set?.ToDto();
+    }
 }

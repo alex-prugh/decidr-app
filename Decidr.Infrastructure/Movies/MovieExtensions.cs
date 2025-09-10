@@ -13,7 +13,7 @@ public static class MovieExtensions
             Description = movie.Overview,
             ImageUrl = movie.ImageUrl,
             Popularity = movie.Popularity,
-            ReleaseDate = movie.ReleaseDate == null 
+            ReleaseDate = string.IsNullOrEmpty(movie.ReleaseDate) 
                             ? null
                             : DateTimeOffset.Parse(movie.ReleaseDate)
         };
